@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        RN环境 Android原生和JS交互 · Kahn&#39;s blogs
+        
+    </title>
+    <link rel="icon" href= /assests/favicon.ico>
+    <!-- 提前加载place holder  -->
+    <style>
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url('/kahnblog/font/Oswald-Regular.ttf');
+        }
+        @font-face {
+            font-family: 'Source Sans Pro';
+            src: url('/kahnblog/font/Source Sans Pro.woff'),
+            url('/kahnblog/font/Source Sans Pro.woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Source Code Pro';
+            src: url('/kahnblog/font/SourceCodePro-Regular.ttf.woff'),
+            url('/kahnblog/font/SourceCodePro-Regular.ttf.woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        
+        .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0px;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        99% {
+            transform: translate3d(0, 0, 0);
+        }
+        99.1% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(-226px, 0, 0);
+        }
+    }
+    </style>
+    <link rel="stylesheet" href="/kahnblog/css/style.css">
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/kahnblog/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/kahnblog/" >Kahn&#39;s blogs</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">RN环境 Android原生和JS交互</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/kahnblog/>Kahn's blogs</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+    
+    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            RN环境 Android原生和JS交互
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+        </p>
+        <!-- 404 -->
+        
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = Android>Android</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = RN>RN</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/09/15</span>
+            </div>
+            <!-- 
+
+<div class="post-share iconfont-archer">
+    <ul class="share-box" data-href = "/kahnblog/2017/09/15/RN环境-Android原生和JS交互/" data-title = "RN环境 Android原生和JS交互" >
+        <li class="to-weibo">分享到微博</li>
+        <li class="to-wechat">分享到微信</li>
+        <li class="to-qq">分享到QQ</li>
+        <li class="to-twitter">分享到twitter</li>
+    </ul>
+</div> -->
+        
+    </div>
+</div>
+        <div class="container">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>本人作为Android开发，以Android开发的角度记录一下集成RN，及和RN开发同事的配合需要做的事情。主要就是互相交互的问题。其实官方文档上已经说的很清楚啦，但是不够口语化，自己再叙述一边，加深一下印象。</p>
+<h2 id="JS调用原生的方法"><a href="#JS调用原生的方法" class="headerlink" title="JS调用原生的方法"></a>JS调用原生的方法</h2><p>官方举了一个JS调用原生类Toast的例子，在这里就照搬咯。在RN的世界，一般都是以Module为单位的。所以原生想提供一套具有关联性的方法，就应该把它归集成一个Module提供给JS。</p>
+<h3 id="编写Module类"><a href="#编写Module类" class="headerlink" title="编写Module类"></a>编写Module类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ToastModule</span> <span class="keyword">extends</span> <span class="title">ReactContextBaseJavaModule</span></span></div></pre></td></tr></table></figure>
+<p>新建一个类，集成RN的类ReactContextBaseJavaModule，那么这个类就是一个可以为JS提供方法的Module啦。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@ReactMethod</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">(String message, <span class="keyword">int</span> duration)</span> </span>&#123;</div><div class="line">    Toast.makeText(getReactApplicationContext(), message, duration).show();</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>在一个方法上加一个@ReactMethod注解，那么这个就是一个提供给JS调用的方法。JS那边调用的参数类型对应为：</p>
+<p>下面的参数类型在@ReactMethod注明的方法中，会被直接映射到它们对应的JavaScript类型。</p>
+<h4 id="参数类型"><a href="#参数类型" class="headerlink" title="参数类型"></a>参数类型</h4><blockquote>
+<p>Boolean -&gt; Bool<br>Integer -&gt; Number<br>Double -&gt; Number<br>Float -&gt; Number<br>String -&gt; String<br>Callback -&gt; function<br>ReadableMap -&gt; Object<br>ReadableArray -&gt; Array  </p>
+</blockquote>
+<p>再给这个Module起一个名字，复写ReactContextBaseJavaModule的getName方法，返回一个名字。JS里面就用这个名字调！</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function">Override</span></div><div class="line">  <span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="string">"ToastExample"</span>;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>到这儿Module就写完了，怎么提供给JS呢？</p>
+<h3 id="注册Module"><a href="#注册Module" class="headerlink" title="注册Module"></a>注册Module</h3><p>原生模块注册Module给JS调用是以package为单位的。一组Module是一个package。这个package是什么呢？以什么类型存在呢？</p>
+<p>React-Native提供了一个ReactPackage接口，接口里有个名为createNativeModules的方法，返回值为List<nativemodule>，NativeModule是一个接口。我们写的Module类集成自ReactContextBaseJavaModule类，ReactContextBaseJavaModule又集成自BaseJavaModule，BaseJavaModule实现了NativeModule接口。很明显了，我们只要实现ReactPackage接口的createNativeModules，把我们写好的Module类返回，就OK了！</nativemodule></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestUtilsPackage</span> <span class="keyword">implements</span> <span class="title">ReactPackage</span> </span>&#123;</div><div class="line"></div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">public</span> List&lt;ViewManager&gt; <span class="title">createViewManagers</span><span class="params">(ReactApplicationContext reactContext)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> Collections.emptyList();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">public</span> List&lt;NativeModule&gt; <span class="title">createNativeModules</span><span class="params">(</span></span></div><div class="line">                              ReactApplicationContext reactContext) &#123;</div><div class="line">    List&lt;NativeModule&gt; modules = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line"></div><div class="line">    modules.add(<span class="keyword">new</span> ToastModule(reactContext));</div><div class="line"></div><div class="line">    <span class="keyword">return</span> modules;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>Package写好了，完事具备，只欠注册。<br>还记得ReactInstanceManager吗？上篇blog里面有。</p>
+<p>每个RN的界面（其实就是个view），有配有一个ReactInstanceManager。ReactInstanceManager生成的时候，就可以给它加上Package了。我们生成ReactInstanceManager的时候，使用的是建造者模式，ReactInstanceManager.builder().addPackage(new TestUtilsPackage())完成注册，后面JS就可以调用咯。</p>
+<h2 id="回调函数"><a href="#回调函数" class="headerlink" title="回调函数"></a>回调函数</h2><p>官方文档上说，@ReactMethod注解的方法必须是一个void类型的。那么我们怎么把返回值反给JS呢？RN提供两个种回调方式</p>
+<h3 id="第一种：Callback"><a href="#第一种：Callback" class="headerlink" title="第一种：Callback"></a>第一种：Callback</h3><p>在@ReactMethod注解的方法上，参数列表末尾添加两个参数，Callback errorCallback,Callback successCallback，注意，这个Callback是com.facebook.react.bridge.Callback。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.facebook.react.bridge;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Interface that represent javascript callback function which can be passed to the native module</div><div class="line"> * as a method parameter.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Callback</span> </span>&#123;</div><div class="line"></div><div class="line">  <span class="comment">/**</span></div><div class="line">   * Schedule javascript function execution represented by this &#123;<span class="doctag">@link</span> Callback&#125; instance</div><div class="line">   *</div><div class="line">   * <span class="doctag">@param</span> args arguments passed to javascript callback method via bridge</div><div class="line">   */</div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">invoke</span><span class="params">(Object... args)</span></span>;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在@ReactMethod注解的方法里面回调callbabck的invoke方法就可以了。invoke是个可变参，参数类型参见上面的参数类型介绍。</p>
+<h3 id="第二种：Promise"><a href="#第二种：Promise" class="headerlink" title="第二种：Promise"></a>第二种：Promise</h3><p>该接口为com.facebook.react.bridge.Promise，把它作为最后一个参数，就可以使用了。</p>
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><ul>
+<li>不管是Callback，还是Promises，都只能调用一次，千万不要把它缓存起来多次调用！！！</li>
+<li>夸语言的调用方式都是异步的。不管是Callback，还是Promises回调的时候，都是往消息循环中发送一条消息。</li>
+</ul>
+<h2 id="给JS发事件"><a href="#给JS发事件" class="headerlink" title="给JS发事件"></a>给JS发事件</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">sendEvent</span><span class="params">(ReactContext reactContext,</span></span></div><div class="line">                       String eventName,</div><div class="line">                       @Nullable WritableMap params) &#123;</div><div class="line">  reactContext</div><div class="line">      .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)</div><div class="line">      .emit(eventName, params);</div><div class="line">&#125;</div><div class="line">...</div><div class="line">WritableMap params = Arguments.createMap();</div><div class="line">...</div><div class="line">sendEvent(reactContext, <span class="string">"keyboardWillShow"</span>, params);</div></pre></td></tr></table></figure>
+<p>ReactContext对象可以从ReactInstanceManager中获取。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>原生和JS的互动，基本手段差不多就这些了。还有一个什么从startActivityForResult获取结果。感觉现在很少有人用吧？基本调用都很简单，但是要封装成能用的类库，供各个业务通用使用，还是需要有一些封装手段的。第一篇讲了原生集成RN环境的基本开发环境搭建，本篇说的是互相调用。计划再弄一篇，原生集成RN，原生端的代码需要怎么开发，还有基本原理。</p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+            <li class="previous">
+                <a href= "/kahnblog/2017/09/19/Android原生app加载RN界面原理/" title= Android原生app加载RN界面过程 >
+                    <span>Previous Post</span>
+                    <span>Android原生app加载RN界面过程</span>
+                </a>
+            </li>
+        
+        
+            <li class="next">
+                <a href= "/kahnblog/2017/09/14/Dagger-2-迁移方案和生成代码基本原理/" title= Dagger 2 迁移方案和生成代码基本原理 >
+                    <span>Next Post</span>
+                    <span>Dagger 2 迁移方案和生成代码基本原理</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 来必力City版安装代码 -->
+
+    
+
+<!-- City版安装代码已完成 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="emailto:kahn_2009@live.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/kahnsen" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span>
+        <span
+            id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_pv"></span>
+        </span>
+    </div>
+    
+</footer>
+    </div>
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-category">
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 19 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/20</span><a class="archive-post-title" href= "/kahnblog/2018/07/20/Flutter了解一下？/" >Flutter了解一下？</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span><a class="archive-post-title" href= "/kahnblog/2018/07/06/使用Python创建你自己的CLI工具箱/" >使用Python的Plumbum库创建你自己的CLI工具箱</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/29</span><a class="archive-post-title" href= "/kahnblog/2018/06/29/Python3学习笔记/" >Python3学习笔记</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/03</span><a class="archive-post-title" href= "/kahnblog/2018/05/03/用Android-productFlavors-构建你的多面应用/" >用Android productFlavors 构建你的多面应用 </a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/kahnblog/2017/12/05/Annotation-Processing-Tool/" >Annotation Processing Tool</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/29</span><a class="archive-post-title" href= "/kahnblog/2017/11/29/ASM全解析/" >ASM全解析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/23</span><a class="archive-post-title" href= "/kahnblog/2017/11/23/Git常用命令备忘/" >Git常用命令备忘</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/17</span><a class="archive-post-title" href= "/kahnblog/2017/11/17/搭建Jenkins-Git-Gradle持续集成CI打包平台/" >搭建Jenkins+Git+Gradle持续集成CI打包平台</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/kahnblog/2017/10/30/Java-7-and-Java-8特性你有用过吗？一/" >Java 7 and Java 8特性你有用过吗？二</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/kahnblog/2017/09/27/Java-7-and-Java-8特性你有用过吗？/" >Java 7 and Java 8特性你有用过吗？一</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/19</span><a class="archive-post-title" href= "/kahnblog/2017/09/19/Android原生app加载RN界面原理/" >Android原生app加载RN界面过程</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/15</span><a class="archive-post-title" href= "/kahnblog/2017/09/15/RN环境-Android原生和JS交互/" >RN环境 Android原生和JS交互</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/14</span><a class="archive-post-title" href= "/kahnblog/2017/09/14/Dagger-2-迁移方案和生成代码基本原理/" >Dagger 2 迁移方案和生成代码基本原理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/14</span><a class="archive-post-title" href= "/kahnblog/2017/09/14/EventBus3-0源代码全解析/" >EventBus3.0源代码全解析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/kahnblog/2017/09/12/Android集成RN/" >现有原生Android应用集成RN（React Native Android）开发环境</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/11</span><a class="archive-post-title" href= "/kahnblog/2017/09/11/你还敢说精通Java吗？/" >你还敢说精通Java吗？</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/08</span><a class="archive-post-title" href= "/kahnblog/2017/09/08/开源许可证/" >开源许可证文章整理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/08</span><a class="archive-post-title" href= "/kahnblog/2017/09/08/Markdown-Help/" >Markdown Help</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2014 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/11</span><a class="archive-post-title" href= "/kahnblog/2014/06/11/UML复习备忘录/" >UML复习备忘录</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">Sofeware</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Tools</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Reproduced</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Software</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Java</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Android</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">RN</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Dagger</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">EventBus</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Python3</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Python</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/kahnblog/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+

@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        Java 7 and Java 8特性你有用过吗？二 · Kahn&#39;s blogs
+        
+    </title>
+    <link rel="icon" href= /assests/favicon.ico>
+    <!-- 提前加载place holder  -->
+    <style>
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url('/kahnblog/font/Oswald-Regular.ttf');
+        }
+        @font-face {
+            font-family: 'Source Sans Pro';
+            src: url('/kahnblog/font/Source Sans Pro.woff'),
+            url('/kahnblog/font/Source Sans Pro.woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Source Code Pro';
+            src: url('/kahnblog/font/SourceCodePro-Regular.ttf.woff'),
+            url('/kahnblog/font/SourceCodePro-Regular.ttf.woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        
+        .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0px;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        99% {
+            transform: translate3d(0, 0, 0);
+        }
+        99.1% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(-226px, 0, 0);
+        }
+    }
+    </style>
+    <link rel="stylesheet" href="/kahnblog/css/style.css">
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/kahnblog/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/kahnblog/" >Kahn&#39;s blogs</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">Java 7 and Java 8特性你有用过吗？二</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/kahnblog/>Kahn's blogs</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+    
+    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            Java 7 and Java 8特性你有用过吗？二
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+        </p>
+        <!-- 404 -->
+        
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = Java>Java</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/10/30</span>
+            </div>
+            <!-- 
+
+<div class="post-share iconfont-archer">
+    <ul class="share-box" data-href = "/kahnblog/2017/10/30/Java-7-and-Java-8特性你有用过吗？一/" data-title = "Java 7 and Java 8特性你有用过吗？二" >
+        <li class="to-weibo">分享到微博</li>
+        <li class="to-wechat">分享到微信</li>
+        <li class="to-qq">分享到QQ</li>
+        <li class="to-twitter">分享到twitter</li>
+    </ul>
+</div> -->
+        
+    </div>
+</div>
+        <div class="container">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>刚好<a href="https://developer.android.com/studio/releases/index.html" target="_blank" rel="external">Android Studio3.0</a>发布了，不但对kotlin有了更进一步的支持，<a href="https://developer.android.com/studio/write/java8-support.html" target="_blank" rel="external">Java 8的支持也加强了</a>。随便对Java 8的支持还分api版本和各种条件，但是在这里复习加强一下Java 8是有必要的。这几年可以说Java SDK的发展是极慢的，Java 8也是经过几次跳水才出来，现在的<a href="http://openjdk.java.net/projects/jdk9/" target="_blank" rel="external">Java 9</a>也是一样，上个月也是千呼万唤始出来。刚毕业的时候Java是现代语言的代表，各种好用工具类库，一次开发处处运行的承诺，没有复杂的继承结构，简单的数据类型，绝对的面向对象，无一不代表着前沿的编程语言，给程序员端上一杯咖啡可不是开玩笑的。然而。。在这个各种语言起发的时代，Java慢慢变成了臃肿的代表，已不再年轻，各种简约的语言奋起直追，咖啡已经快要喝不成了。再次默哀Sun公司被Oracle收购，而不是IBM。</p>
+<h1 id="Java-8"><a href="#Java-8" class="headerlink" title="Java 8"></a>Java 8</h1><h2 id="新特性"><a href="#新特性" class="headerlink" title="新特性"></a>新特性</h2><p>Lambda表达式语法和Stream API无疑是Java最大的更新，这玩意放在后面说，现说一下更新的小点。</p>
+<h4 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h4><ol>
+<li>添加join方法拼接字符串</li>
+</ol>
+<h4 id="数字类"><a href="#数字类" class="headerlink" title="数字类"></a>数字类</h4><ol>
+<li>数字类型的包装类添加静态字段BYTES来表示这种数据类型占有多少字节。java 5添加了SIZE表示占有多少位</li>
+<li>基础类型包装类各自都提供了一些聚合函数方法，在流操作中可以使用，例如Integer.max</li>
+<li>最早和公司的C++同事做网络交互，痛苦了一下。现在数字类型增加无符号计算。toUnsignedLong等。注意：无符号是有符号大于0的两倍，小心溢出，及时转化为更大的存储类型</li>
+<li>Math数学计算类提供精确计算方法addExact。如果溢出就抛异常。之前直接计算，溢出后会得出错误结果。</li>
+</ol>
+<h4 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h4><ol>
+<li>一些集合类也都添加了新的方法，大部分都是为Stream API服务的。这个我们后面说到Stream API时再说。</li>
+</ol>
+<h4 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h4><ol>
+<li>可重复的注解，一个元素上可以声明两个相同的注解，这两个相同的注解会被编译器合并成一个注解集合（前提是你定义这个注解集合）</li>
+</ol>
+<h4 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h4><ol>
+<li>反射可取出参数名称</li>
+</ol>
+<h4 id="时间和日期新的api-java-time"><a href="#时间和日期新的api-java-time" class="headerlink" title="时间和日期新的api java.time"></a>时间和日期新的api java.time</h4><p>之前我们处理时间和日期的计算都是用的Date和Calendar，他们都在util包里面。不能说好用和不好用。因为我们没得选，只有他们。后来在我们的工程里还引入了一个第三方的时间类库org.joda.time，但是说实话在android开发里面，每次引入一个第三方工具类库，都要下一定的决心。每一次的引入都代表了包体积的变大，<a href="http://iceanson.github.io/%E7%99%BE%E8%BD%AC%E5%8D%83%E5%9B%9E%E7%9A%84too-many-classes-in-main-dex-list" target="_blank" rel="external">方法数增加（感谢公司大哥解决方法数超标的问题）</a>，甚至类多了的时候还有加载类的时间消耗。这次java大发慈悲，开了个.time的新的工具包专门用来处理时间相关的东西，大致瞅了一眼，很值得用一下，基本可以把joda库移除了。</p>
+<ol>
+<li>java.time的对象都是不可变的。每次计算都会生成新的实力。这点可以避免了像Calendar对象传来传去不知道在哪里被改了的尴尬。我们程序中增减发生过这样的bug，不得不把所有用到Calendar的方法都看了一遍。如果你真的想用Calendar做为参数，请传进去的时候clone一下好吗?</li>
+<li>Instant一个时间点</li>
+<li>Duration两个时间点的距离，内含方法可以获得时间转换，例如两个时间点之间是多少分钟，多少小时。</li>
+<li>LocalDateTime A date-time without a time-zone in the ISO-8601 calendar system, such as 2007-12-03T10:15:30.注意没有时区信息。ZonedDateTime，指定某个时区中的一个时间点。关于处理带有时区的片段时间，使用Period，而非Duration，Period有夏令时的时间变化。以后我们处理时间段，基本都会使用Period。</li>
+<li>TemporalAdjuster处理日历的常用信息。例如找到某月的第几个星期一。该类位于java.time.temporal包中，java.time还有4个子包，分别是zone（处理时区），chrono（通用API以外的日历系统默认的ISO。），format（格式化），temporal（时间处理）。</li>
+<li>使用DateTimeFormatter格式化时间。</li>
+<li>LocalData是一个年月日的日期，如果你的程序大量使用日期（不含时间），就可以用它的。反正我们现在项目就是这样，用Calendar的时候，还要把时间信息清零，很是麻烦。最大的利好！终于把Date的反人类设计，月份从0开始改为了1。常用方法详见api。里面有各种计算，甚至还能加上减去一个周期，参数为Period对象或者Duration</li>
+<li>LocalTime表示一天的时间。LocalDataTime既有时间又有日期。</li>
+<li><a href="https://my.oschina.net/benhaile/blog/193956" target="_blank" rel="external">Java 8新特性探究（七）深入解析日期和时间-JSR310</a>，网上搜到文章，一看日期，尼玛4年前。哥们玩了四年吗？</li>
+</ol>
+<h4 id="新的JS引擎Nashorn"><a href="#新的JS引擎Nashorn" class="headerlink" title="新的JS引擎Nashorn"></a>新的JS引擎Nashorn</h4><p>搜了一下Nashorn的英文，犀利啊，犀牛式自行反坦克炮。前代官方自带JS引擎还是犀牛（Rhino）呢。速度更快，更好的利用JVM的性能。对ECMA有更好的兼容性。在我的android项目中，使用了Rhino库。android里面要想使用js引擎必须引入jar包。在android中引入js引擎之前，我们的项目一直采用new webview的方式加载js，速度非常慢，还必须在主线程中new Webview，而且有时候还发生调用无响应的情况。后来筛选了可用的js引擎，几个重量级的库都太大，还是引入了jdk官方自带的Rhino，一个叫rhino.jar的包。  </p>
+<h4 id="JavaFX"><a href="#JavaFX" class="headerlink" title="JavaFX"></a>JavaFX</h4><p>JavaFX得到加强，现在Java PC客户端开发应该不多了吧？但是在公司写个带界面小工具还是很有用的。<br>题外话：<br>之前有做过公司的AWT项目，是一个房间清洁系统.KTV包房客人离场后，服务员进来检查包房内设施，然后在包房屏幕上对所检查的项目进行勾选，什么屏幕是否完好，这样的一个项目。当时我做出来的东西丑的要死，被老板嫌弃的一套糊涂。很有意思的是这个项目第一次用到JNI，java调用本地windows的ddl动态库，例子很难找，jni的jar包也超级难找。找到了发现还是包名为com.sun的。再次鄙视Oracle。</p>
+<h2 id="Lambda表达式和StreamAPI"><a href="#Lambda表达式和StreamAPI" class="headerlink" title="Lambda表达式和StreamAPI"></a>Lambda表达式和StreamAPI</h2><h4 id="函数式编程"><a href="#函数式编程" class="headerlink" title="函数式编程"></a>函数式编程</h4><p>我认为的函数式编程就是以函数为中心，把函数穿起来形成一个流的编程方法就是函数式编程。这和我们传统（本来还是先进的）的结构化编程是两种思想。函数式编程对特定的一些场景拥有绝对的优势，例如流式操作：要干啥–&gt;干完啥还要干啥，还有并发和事件驱动上（android中有大量的事件）。结构化编程的代表作就是设计模式。对一项功能，一个工程按照面向对象的设计思想，进行抽象重用的设计。这两种编程模式，一个针对整体结构，一个针对具体操作。不能说谁能替代谁。不能滥用设计模式，也不能处处都用函数式。</p>
+<h4 id="Lambda表达式"><a href="#Lambda表达式" class="headerlink" title="Lambda表达式"></a>Lambda表达式</h4><ol>
+<li><p><em>一个lambda表达式，可以认为是一个带参数的代码块。</em>所以在我们Android Studio中经常会把  </p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">   llContent.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() &#123;</div><div class="line">       <span class="meta">@Override</span></div><div class="line">       <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</div><div class="line">xxx;</div><div class="line">       &#125;</div><div class="line">   &#125;);</div></pre></td></tr></table></figure>
+<p> 转换成</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">llContent.setOnClickListener((v)-&gt;&#123;xxx;&#125;).</div></pre></td></tr></table></figure>
+<p> 这种事件，就是点击时我要执行xxx;传进去一个view对象。按照传统的写法，我们必须明确Callback的对象类型，这里必须传入一个View.OnClickListener的匿名对象。在点击时，android框架会调用这个OnClickListener对象，把view传进去。其实，我们并不关心Callback的对象类型，管你是View.OnClickListener还是什么鬼。只要你能接收一个View参数，然后被执行就可以了。这就是lambda的优势。省去类型执行，直接写参数代码块。(v)-&gt;{xxx;}这样的写法，系统会自动找到一个参数为view的回调设置进去。   </p>
+</li>
+<li><p>想要代码在以后的某个时间点执行可以用lambda表达式</p>
+</li>
+<li><p>Lambda语法   </p>
+<ul>
+<li><p>参数 -&gt; 代码.    </p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">  标准写法：  </div><div class="line">  (View v)-&gt;&#123;xxx;&#125;</div><div class="line">  </div><div class="line">  如果参数可推导出来，比如接收者是一个泛型，或则只有一个方法一个参数，总之就是参数的类型可以确定一个方法签名，类型就可以省略</div><div class="line">  (v) -&gt; &#123;xxx;&#125;</div><div class="line">  如果只有一个参数，且可推导，括号可省略</div><div class="line">  v -&gt; &#123;xxx;&#125;</div><div class="line">  如果代码只有一句话，可省略花括号</div><div class="line">  v -&gt; xxx;</div><div class="line">  不用给表达式指定返回类型。而且，如果有返回值，就一定要返回  </div><div class="line">  v -&gt; &#123;<span class="keyword">if</span>( <span class="number">1</span> &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>; &#125;;是并不合法的</div><div class="line">如果没有参数</div><div class="line">() -&gt; &#123;xxx;&#125; </div><div class="line">被执行的lambda只有一句代码的话，可以***传递方法引用***</div><div class="line"><span class="number">1</span>. (v) -&gt; &#123;System.out.println(v)&#125; 可以直接写成System.out::println 传递的其实是println方法，冒号前面是对象，冒号后面是执行的方法，默认执行方法的参数就是lambda的参数</div><div class="line"><span class="number">2</span>. (x, y) -&gt; &#123;x.compareToIgnoreCase(y);&#125; 可以直接写成String::compareToIgnoreCase，默认调用的是lambda第一个参数x的compareToIgnoreCase方法，compareToIgnoreCase的参数为lambda的第二个参数y</div><div class="line"><span class="number">3</span>. 方法引用传递还可以使用<span class="keyword">this</span>和<span class="keyword">super</span>。例如：x -&gt; <span class="keyword">this</span>.equals(x) 等同于<span class="keyword">this</span>::equals，<span class="keyword">super</span>同理。注意：这里的<span class="keyword">this</span>和<span class="keyword">super</span>都是函数式接口的匿名实现类的外部类。</div><div class="line"><span class="number">4</span>. 还可以这样 外部类.<span class="keyword">this</span>::外部类方法 外部类.<span class="keyword">super</span>::外部类方法</div><div class="line"><span class="number">5</span>. 构造方法引用同样可以传递 x -&gt; <span class="keyword">new</span> String(x); 等同于 String::<span class="keyword">new</span> 数组也可以这样搞 x-&gt;<span class="keyword">new</span> <span class="keyword">int</span>[x] 等同 <span class="keyword">int</span>[]::<span class="keyword">new</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><p>Java老版本也定义了很多只有一个方法的接口，例如：Runnable，java.util.Comparator，这种接口称为<em>函数式接口</em>，在Java新的支持Lambda的版本中（java8），lambda表达式只能赋值给函数式接口。so：在理解lambda表达式的时候，可以全面摒弃之前的思想，觉得他就是一个接口声明的简便形式。要理解成它一个代码块，把代码块传进去就能执行，而在编写lambda表达式的时候，只要遵循上面的语法，应该不会有什么大问题<em>(参数) -&gt; {代码}</em>，在旧的代码中，每个接口有固定的作用，比如java.util.Comparator。没有lambda的时候，你只能老老实实的new一个java.util.Comparator实现类然后传进sort方法中。<br>在有lambda的情况下你可以这么写</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">  Arrays.sort(a, (one, tow) -&gt; &#123;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>   也可以这么写</p>
+   <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Comparator c = (one, tow) -&gt; &#123;</div><div class="line">	</div><div class="line">		<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">	&#125;;</div><div class="line">	Arrays.sort(a, c);</div></pre></td></tr></table></figure>
+<p>   也就是说，</p>
+<pre><code><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">(one, tow) -&gt; &#123;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</code></pre><p>这段lambda可以赋值给任何具有 两个参数一个返回值的函数式接口。<br>java8中添加了java.util.function包，里面有各式各样的函数式接口。如果你需要【两个参数一个返回值】这样的函数式接口，最好从这个包里找，不要直接使用Comparator，虽然他们的形式是一样的，但是在java的世界里，他们还是属于不同的类型。<br>例如：BiFunction<t,u,r>这个接口和Comparator是一样的。但是你总不能这么写吧？</t,u,r></p>
+<pre><code><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">BiFunction b = (one, tow) -&gt; &#123;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;;</div><div class="line">Arrays.sort(a, b);<span class="comment">//这里就错了，sort方法只能接收一个Comparator，而不是BiFunction。</span></div></pre></td></tr></table></figure>
+</code></pre></li>
+<li><p>@FunctionalInterface可以标注在函数式接口的接口上，让编译器帮助检查该函数式接口的合法性。就是你不写这个注解，只有一个抽象方法的接口类也是函数式接口，可以接收lambda。</p>
+</li>
+<li>使用lambda的时候，异常信息也要匹配，才能成功转换。如果一个函数式接口没有抛出异常</li>
+<li>lambda表达式可以使用外部闭合域的变量，拥有闭包行为，但是不能修改它的值，这个跟我们匿名内部类使用外部类的变量必须是final的有点类似，但是在这里lambda表达式里面使用的变量不用声明成final的。</li>
+</ul>
+<h4 id="接口的默认方法和静态方法"><a href="#接口的默认方法和静态方法" class="headerlink" title="接口的默认方法和静态方法"></a>接口的默认方法和静态方法</h4><ol>
+<li>定义方法使用default关键字：例如default String getName(){return “xxx”};</li>
+<li>冲突规则：如果接口中的默认方法，和父类中的方法冲突，父类优先。如果两个接口的默认方法冲突，必须在实现类中手动解决实现。</li>
+<li>接口可以添加静态方法</li>
+</ol>
+<h4 id="Stream-API"><a href="#Stream-API" class="headerlink" title="Stream API"></a>Stream API</h4><p>Java 8为提供函数式编程特别支持的工具包java.util.stream,Stream API都在里面。在java8里，Collection接口中添加了stream()方法，可以把集合转为一个流，使用parallelStream可转换成一个支持并发的流。如果是一个数组，可以使用Stream.of方法转换，Arrays.stream也可以把数组转为流，并且可以截取一段数组。Stream中含有各种生成流的方式，有生成空流的empty，有可以生成带元素的generate，生成序列的iterate。还有很多类提供了转换流的方式，例如正则表达式的Pattern.splitAsStream。</p>
+<p>Stream实现了AutoCloseable接口，可以关闭，也可以支持java7中自动关闭资源语法。</p>
+<p>流是延迟操作的，经过一些列的转换，执行逻辑，到最后执行一个方法才会进行真正的操作。</p>
+<h5 id="流转换"><a href="#流转换" class="headerlink" title="流转换"></a>流转换</h5><ol>
+<li>filter 过滤：通过过滤条件生成新的流。它接收的函数式接口为一个参数为T，返回值为布尔的接口，这里的接口名为Predicate。再重申一次，真正的函数式编程并不在乎这个接口的类型是什么，因为函数式只是一个有参数有返回值的代码块，只是因为Java要兼容以前的基于接口的结构化编程，所以才这么做。在别的彻底支持函数式编程的语言中，同样形式的代码块是可以通用的。后面我们再看到一些函数式接口，不要在意它的类型，重点关注参数和返回值。一般参数和返回值都写在函数式接口的类泛型声明中。</li>
+<li>map 映射：对流中的每个元素执行方法，产生一个新的流。如果是流中套流，可以使用flatmap展开</li>
+<li>limit(n)：截取长度为n的流元素为新的流。skip(n)：丢弃n个元素生成新的流。concat：连接两个流，第一个流不能是无限流。peek：产生一个完全相同的流，peek新流时，每获取一个元素会执行一个方法。peek可以检测原始流中的内容是否已改变。</li>
+<li>有状态的转换: 1,distinct去重后，按原顺序返回一个流 2，sorted 排序。和集合中的排序不同，它会产生新的流，集合中的排序是对原有集合排序。</li>
+<li>终止操作：代表要从一个流中取结果了，进行了终止操作的流无法再进行转换，所有被延迟的操作都会立即执行，返回值是一个Optional<ul>
+<li>聚合操作：count，min，max</li>
+<li>查找最终值：findFirst 查找第一个就返回，findAny查找全部，发现一个立即返回，常用于并行操作时找到的第一个执行完成的任务后，结束整个计算。  </li>
+</ul>
+</li>
+<li>parallel： 获取一个并发流，如果不是并发流会获取新的并发流。如果是并发流，会获取自己。<ul>
+<li>插播一条文章：<a href="http://www.cnblogs.com/imyijie/p/4478074.html" target="_blank" rel="external">Java8中 Parallel Streams 的陷阱 [译]</a>，文章大意是带并发的流共享一个线程池，有可能被和本业务不相关的流阻塞掉。这里其实跟上一篇Java 7介绍并发说的一样，如果使用自带的线程池，所有并发api共享同一个线程池。</li>
+</ul>
+</li>
+<li>reduce，持续操作，每次迭代传入上次结果和当前值。可以指定起始位置。</li>
+</ol>
+<h5 id="Optional"><a href="#Optional" class="headerlink" title="Optional"></a>Optional</h5><p>Java为消除空指针而做出的努力！你如果这个Optional只是一个封装类，那就太小看它了。</p>
+<p>isPresent()：可以看下有没有包含结果，返回值为布尔。get()为获取结果，如果没有结果硬要get，只能送你一NoSuchElementException。</p>
+<p>public void ifPresent(Consumer&lt;? super T&gt; consumer)：带有参数的isPresent。参数是一个函数式接口，在有值得情况下，会把值传递给这个函数式接口。Consumer是一个有一个参数且没有返回值的函数式接口。该方法没有返回值。</p>
+<p>map：可以对结果进行处理，再次返回一个Optional，这样做的好处是，你不用先判断结果可不可用再去处理它。而是先处理了再说，处理完后再看结果。</p>
+<p>orElse,orElseGet：都可以获取如果没有结果的默认值。也许你以后可以写optional.orElse(“”)，不用再写str == null ? “” : str;</p>
+<p>Optional的构造函数是私有的，只能通过静态的几个of方法来创建。</p>
+<p>Optional的flatmap和Stream的flatmap是一样的，都是属于可展开结果的方法。如果你的结果为Optional<t>,这个T有一个f方法的返回值类型为一个<code>Optional&lt;U&gt;</code>，那么你调用flatmap(T::f)，可以直接得到<code>Optional&lt;U&gt;</code>结果.</t></p>
+<h5 id="收集结果"><a href="#收集结果" class="headerlink" title="收集结果"></a>收集结果</h5><p>得到Optional的方法一般都是只有一个结果的聚合方法，如果想得到一个集合可以通过iteractor。通过toArray可以获取一个数组，可以传入String[]::new这样的方法引用来获取正确的类型，如果不传，将获取一个Object[]。</p>
+<p>collect用来把流中的元素收集到集合中。collect方法有一个参数，参数参考Collectors，可以选择用Set，List还是具体HashSet类型收集。stream.collect(Collectors.toCollection(Hashset::new))，Collectors的作用还有很多，还可以用toMap把结果收集在map里，收集到map时需注意，键不能一样，如果一样会抛异常，不过还可以使用带有第三个参数的tomap进行处理，他会把新值旧值都给你，让你选一个。具体可查看Collectors的文档，这玩意就是为了收集结果用的帮助类。收集时注意并发问题，使用toConcurrentMap。</p>
+<p>Collectors：还可以分组，groupingBy返回一个map。接收一个函数式获取key，同样key的元素将被收集到一个list做为map的value。还可以收集的集合类型，可以选择是list还是set。partitioningBy跟groupingBy差不多，但是它接收的函数式只能返回布尔，也就是只能分成两组。<br>mapping方法可以对结果执行函数。</p>
+<p>foreach也是终止操作，foreachOrder可以按顺序执行。</p>
+<p>maptoInt可以把对象流转换为原始类型流IntStream。boxed可以把原始类型流装箱为对象流。</p>
+<p><strong><em>特别注意：使用流操作时，要认真看api文档，如果文档有说：“This is a terminal operation.”，那么这个操作就是终止操作，流使用完就不能再使用了</em></strong></p>
+<h5 id="并行流"><a href="#并行流" class="headerlink" title="并行流"></a>并行流</h5><p>流的行为模式分为串行流和并行流，一般默认生成的都是串行流。parallel方法可以把任意未结束的串行流转换为并行流。<strong><em>时刻谨记：并行流中执行的代码是并行的，线程不安全的！！！</em></strong><br>有序和无序：从有序集合转过去的就是有序流，无序集合转的就是无序的。有无顺序并不影响并行操作结果，它会并行执行，然后把结果有序的组织起来。如果放弃顺序，可以得到性能上的提升。</p>
+<h5 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h5><table>
+<thead>
+<tr>
+<th>函数式接口</th>
+<th>参数类型</th>
+<th>返回类型</th>
+<th>api文档描述</th>
+<th>特殊解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BiConsumer<t,u></t,u></td>
+<td>T,U</td>
+<td>void</td>
+<td>Represents an operation that accepts two input arguments and returns no result.</td>
+<td></td>
+</tr>
+<tr>
+<td>BiFunction<t,u,r></t,u,r></td>
+<td>T,U</td>
+<td>R</td>
+<td>Represents a function that accepts two arguments and produces a result.</td>
+<td></td>
+</tr>
+<tr>
+<td>BinaryOperator<t></t></td>
+<td>T,T</td>
+<td>T</td>
+<td>Represents an operation upon two operands of the same type, producing a result of the same type as the operands.</td>
+<td>BiFunction的子类，日常用于第一个参数是上一次跌的结果，第二参数是当前元素，返回值是运算后的与当前元素同类型的参数</td>
+</tr>
+<tr>
+<td>BiPredicate<t,u></t,u></td>
+<td>T,U</td>
+<td>Boolean</td>
+<td>Represents a predicate (boolean-valued function) of two arguments.</td>
+<td></td>
+</tr>
+<tr>
+<td>BooleanSupplier</td>
+<td>void</td>
+<td>Boolean</td>
+<td>Represents a supplier of boolean-valued results.</td>
+<td></td>
+</tr>
+<tr>
+<td>Consumer<t></t></td>
+<td>T</td>
+<td>void</td>
+<td>Represents an operation that accepts a single input argument and returns no result.</td>
+<td></td>
+</tr>
+<tr>
+<td>DoubleBinaryOperator</td>
+<td>Double,Double</td>
+<td>Double</td>
+<td>Represents an operation upon two double-valued operands and producing a double-valued result.</td>
+<td></td>
+</tr>
+<tr>
+<td>DoubleConsumer</td>
+<td>Double</td>
+<td>void</td>
+<td>Represents an operation that accepts a single double-valued argument and returns no result.</td>
+<td></td>
+</tr>
+<tr>
+<td>DoubleFunction<r></r></td>
+<td>Double</td>
+<td>R</td>
+<td>Represents a function that accepts a double-valued argument and produces a result.</td>
+<td></td>
+</tr>
+<tr>
+<td>DoublePredicate</td>
+<td>Double</td>
+<td>Boolean</td>
+<td>Represents a predicate (boolean-valued function) of one double-valued argument.</td>
+<td></td>
+</tr>
+<tr>
+<td>DoubleSupplier</td>
+<td>VOID</td>
+<td>double</td>
+<td>Represents a supplier of double-valued results.</td>
+<td></td>
+</tr>
+<tr>
+<td>DoubleToIntFunction</td>
+<td>double</td>
+<td>int</td>
+<td>Represents a function that accepts a double-valued argument and produces an int-valued result.</td>
+<td></td>
+</tr>
+<tr>
+<td>DoubleToLongFunction</td>
+<td>double</td>
+<td>long</td>
+<td>Represents a function that accepts a double-valued argument and produces a long-valued result.</td>
+<td></td>
+</tr>
+<tr>
+<td>DoubleUnaryOperator</td>
+<td>double</td>
+<td>double</td>
+<td>Represents an operation on a single double-valued operand that produces a double-valued result.</td>
+<td></td>
+</tr>
+<tr>
+<td>Function<t,r></t,r></td>
+<td>T</td>
+<td>R</td>
+<td>Represents a function that accepts one argument and produces a result.</td>
+<td></td>
+</tr>
+<tr>
+<td>IntBinaryOperator</td>
+<td>int, int</td>
+<td>int</td>
+<td>Represents an operation upon two int-valued operands and producing an int-valued result.</td>
+<td></td>
+</tr>
+<tr>
+<td>IntConsumer</td>
+<td>int</td>
+<td>void</td>
+<td>Represents an operation that accepts a single int-valued argument and returns no result.</td>
+<td></td>
+</tr>
+<tr>
+<td>IntFunction<r></r></td>
+<td>int</td>
+<td>R</td>
+<td>Represents a function that accepts an int-valued argument and produces a result.</td>
+<td></td>
+</tr>
+<tr>
+<td>IntPredicate</td>
+<td>int</td>
+<td>boolean</td>
+<td>Represents a predicate (boolean-valued function) of one int-valued argument.</td>
+<td></td>
+</tr>
+<tr>
+<td>IntSupplier</td>
+<td>void</td>
+<td>int</td>
+<td>Represents a supplier of int-valued results.</td>
+<td></td>
+</tr>
+<tr>
+<td>IntToDoubleFunction</td>
+<td>int</td>
+<td>double</td>
+<td>Represents a function that accepts an int-valued argument and produces a double-valued result.</td>
+<td></td>
+</tr>
+<tr>
+<td>IntToLongFunction</td>
+<td>int</td>
+<td>long</td>
+<td>Represents a function that accepts an int-valued argument and produces a long-valued result.</td>
+<td></td>
+</tr>
+<tr>
+<td>IntUnaryOperator</td>
+<td>int</td>
+<td>int</td>
+<td>Represents an operation on a single int-valued operand that produces an int-valued result.</td>
+<td></td>
+</tr>
+<tr>
+<td>LongBinaryOperator</td>
+<td>long,long</td>
+<td>long</td>
+<td>Represents an operation upon two long-valued operands and producing a long-valued result.</td>
+<td></td>
+</tr>
+<tr>
+<td>LongConsumer</td>
+<td>long</td>
+<td>void</td>
+<td>Represents an operation that accepts a single long-valued argument and returns no result.</td>
+<td></td>
+</tr>
+<tr>
+<td>LongFunction<r></r></td>
+<td>long</td>
+<td>R</td>
+<td>Represents a function that accepts a long-valued argument and produces a result.</td>
+<td></td>
+</tr>
+<tr>
+<td>LongPredicate</td>
+<td>long</td>
+<td>boolean</td>
+<td>Represents a predicate (boolean-valued function) of one long-valued argument.</td>
+<td></td>
+</tr>
+<tr>
+<td>LongSupplier</td>
+<td>void</td>
+<td>long</td>
+<td>Represents a supplier of long-valued results.</td>
+<td></td>
+</tr>
+<tr>
+<td>LongToDoubleFunction</td>
+<td>long</td>
+<td>double</td>
+<td>Represents a function that accepts a long-valued argument and produces a double-valued result.</td>
+<td></td>
+</tr>
+<tr>
+<td>LongToIntFunction</td>
+<td>long</td>
+<td>int</td>
+<td>Represents a function that accepts a long-valued argument and produces an int-valued result.</td>
+<td></td>
+</tr>
+<tr>
+<td>LongUnaryOperator</td>
+<td>long</td>
+<td>long</td>
+<td>Represents an operation on a single long-valued operand that produces a long-valued result.</td>
+<td></td>
+</tr>
+<tr>
+<td>ObjDoubleConsumer<t></t></td>
+<td>T,double</td>
+<td>void</td>
+<td>Represents an operation that accepts an object-valued and a double-valued argument, and returns no result.</td>
+<td></td>
+</tr>
+<tr>
+<td>ObjIntConsumer<t></t></td>
+<td>T,int</td>
+<td>void</td>
+<td>Represents an operation that accepts an object-valued and a int-valued argument, and returns no result.</td>
+<td></td>
+</tr>
+<tr>
+<td>ObjLongConsumer<t></t></td>
+<td>T,long</td>
+<td>void</td>
+<td>Represents an operation that accepts an object-valued and a long-valued argument, and returns no result.</td>
+<td></td>
+</tr>
+<tr>
+<td>Predicate<t></t></td>
+<td>T</td>
+<td>boolean</td>
+<td>Represents a predicate (boolean-valued function) of one argument.</td>
+<td></td>
+</tr>
+<tr>
+<td>Supplier<t></t></td>
+<td>void</td>
+<td>T</td>
+<td>Represents a supplier of results.</td>
+<td></td>
+</tr>
+<tr>
+<td>ToDoubleBiFunction<t,u></t,u></td>
+<td>T,U</td>
+<td>Double</td>
+<td>Represents a function that accepts two arguments and produces a double-valued result.</td>
+<td></td>
+</tr>
+<tr>
+<td>ToDoubleFunction<t></t></td>
+<td>T</td>
+<td>double</td>
+<td>Represents a function that produces a double-valued result.</td>
+<td></td>
+</tr>
+<tr>
+<td>ToIntBiFunction<t,u></t,u></td>
+<td>T,U</td>
+<td>long</td>
+<td>Represents a function that accepts two arguments and produces an int-valued result.</td>
+<td></td>
+</tr>
+<tr>
+<td>ToIntFunction<t></t></td>
+<td>T</td>
+<td>int</td>
+<td>Represents a function that produces an int-valued result.</td>
+<td></td>
+</tr>
+<tr>
+<td>ToLongBiFunction<t,u></t,u></td>
+<td>T,U</td>
+<td>long</td>
+<td>Represents a function that accepts two arguments and produces a long-valued result.</td>
+<td></td>
+</tr>
+<tr>
+<td>ToLongFunction<t></t></td>
+<td>T</td>
+<td>long</td>
+<td>Represents a function that produces a long-valued result.</td>
+<td></td>
+</tr>
+<tr>
+<td>UnaryOperator<t></t></td>
+<td>T</td>
+<td>T</td>
+<td>Represents an operation on a single operand that produces a result of the same type as its operand.</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Api文档上Java8 function包中的函数式接口全在这里了，我特意把参数和返回值分开，方便查询。这些函数式接口有的是继承关系。为什么要继承呢？因为有的泛型类型不同，但是个数相同。还有就是继承关系可以承接父接口的静态或者默认方法。这些函数式接口大部分都有默认或者静态方法，在使用lambda表达式时非常有用。</p>
+</blockquote>
+<h5 id="函数式接口带来的性能分析疑问"><a href="#函数式接口带来的性能分析疑问" class="headerlink" title="函数式接口带来的性能分析疑问"></a>函数式接口带来的性能分析疑问</h5><p>目前看来，要使用lambda表达式，必须有函数式接口。可以说lambda表达式可以和函数式接口互相转换。在以前的java版本，所谓的函数式接口也就是我们普通认为的回调。</p>
+<p>而且lambda有一个问题，它被写在类中，这类似于以前我们所写的匿名内部类。<u>每个做android的可能对此印象更加深刻，因为在activity中使用匿名内部类，很大可能性的会造成内存泄露，匿名内部类会持有外部类的对象，如果JVM把lambda当成和匿名内部类一样处理方式，我们还能畅快的使用lambda吗？</u></p>
+<p>我们在android中，避免内部类持有外部类对象的一个做法是把这个类声明为static的。但是匿名内部类并不能这么做，除非你不使用匿名内部类，而是使用内部类。不管是内部类，还是匿名内部，都会生成一个带$符的class文件，而且使用它的时候，jvm其实还是当成正常的类去加载，还是会创建这个类的实例。如果大量使用，势必会引起频繁GC，加载类过多过缓。</p>
+<p>带这这些疑问使用lambda，心里肯定不好受，要去探究答案就要去反编译lambda编译成的class文件，和调用代码的class文件。在上一篇文章说Java 7的时候，说到了一个invokedynamic，那篇文章已经说了，在java7当中，任何api都无法生成带invokedynamic指令的class文件，而ASM等第三方库可以生成，而且一些基于jvm的非java语言也可以生成并使用。一晃眼！到了java8，invokedynamic终于被使用了，具体invokedynamic指令是什么意思可以自行google，也可以看我上一篇文章。</p>
+<p>没错，lambda表达式可以生成这样的指令，invokedynamic这玩意可以延迟决定需要调用哪个方法。而反编译lambda表达式生成class文件也看到并没有生成新的内部类的class文件，而是生成了一个static的方法。当运行时，会被invokedynamic指向这个方法。具体可以查看这篇文章<a href="http://droidyue.com/blog/2015/11/28/article-java-8-lambdas-a-peek-under-the-hood/index.html" target="_blank" rel="external">深入探索Java 8 Lambda表达式</a>，非常的详细,里面说，lambda表达式不但是简化书写，而且会提升性能。这才是我们想要的。</p>
+<h2 id="Ending"><a href="#Ending" class="headerlink" title="Ending"></a>Ending</h2><h3 id="发展趋势"><a href="#发展趋势" class="headerlink" title="发展趋势"></a>发展趋势</h3><p>从Java7主打JVM支持多种语言，到Java8主推Lambda表达式的函数式编程，Java被别的优秀语言特性影响已经是不可逆的了。据说Java9将支持模块化，文章推荐：<a href="http://blog.csdn.net/kwame211/article/details/78179894" target="_blank" rel="external">关于 Java 9 你所需要知道的一切</a>。不难看出Java生态圈未来的趋势：主推强类型Java语言，然后以弱类型JVM脚本语言为辅助。函数式，响应式编程大规模应用，项目的模块化管理。优化的越来越好的并发库，可以应对未来硬件多核心cpu的发展。</p>
+<p>每个版本重点优化的地方都有并发，分支合并模型，NIO，以应对java在大数据方面的优势。前10年，J2EE垄断企业级开发web端。后十年要在大数据分布式上发力吗？</p>
+<h3 id="Android的Java8"><a href="#Android的Java8" class="headerlink" title="Android的Java8"></a>Android的Java8</h3><p>上周刚出的as3.0也支持了java8的部分特性，开篇也附上了几个链接。再附上一片官方的文章。里面讲到新的<a href="https://developer.android.com/guide/platform/j8-jack.html?hl=zh-cn" target="_blank" rel="external">Java8编译器采用了Jack工具链</a>，之前javac编辑器都是java文件编译成.class，然后使用dx把.class编译成.dex。现在Jack工具链直接把.java文件编译成.jack，然后又转换成.dex。这是不是依偎着之前AOP编程，直接修改class的工具库都不能用了？</p>
+<p> 官方这样说 ：</p>
+<blockquote>
+<p>已知问题<br>Instant Run 目前不能用于 Jack，在使用新的工具链时将被停用。</p>
+<p>由于 Jack 在编译应用时不生成中间类文件，依赖这些文件的工具目前不能用于 Jack。下面是一些工具示例：</p>
+<p>对类文件进行操作的 Lint 检测工具<br>需要应用类文件的工具和库（例如使用 JaCoCo 进行仪器测试中）<br>如果您在使用 Jack 的过程中发现其他问题，请提交错误。</p>
+</blockquote>
+<p>看来，估计，大概是用不了了。看来我们的项目能用上Java8也是要一段时间的（不可能放弃那些修改class文件的库，不然刚上的那些性能分析，无痕埋点怎么办）。</p>
+<p>是不是应该有相应的修改.jack文件的库出来呢？</p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+            <li class="previous">
+                <a href= "/kahnblog/2017/11/17/搭建Jenkins-Git-Gradle持续集成CI打包平台/" title= 搭建Jenkins+Git+Gradle持续集成CI打包平台 >
+                    <span>Previous Post</span>
+                    <span>搭建Jenkins+Git+Gradle持续集成CI打包平台</span>
+                </a>
+            </li>
+        
+        
+            <li class="next">
+                <a href= "/kahnblog/2017/09/27/Java-7-and-Java-8特性你有用过吗？/" title= Java 7 and Java 8特性你有用过吗？一 >
+                    <span>Next Post</span>
+                    <span>Java 7 and Java 8特性你有用过吗？一</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 来必力City版安装代码 -->
+
+    
+
+<!-- City版安装代码已完成 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="emailto:kahn_2009@live.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/kahnsen" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span>
+        <span
+            id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_pv"></span>
+        </span>
+    </div>
+    
+</footer>
+    </div>
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-category">
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 19 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/20</span><a class="archive-post-title" href= "/kahnblog/2018/07/20/Flutter了解一下？/" >Flutter了解一下？</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span><a class="archive-post-title" href= "/kahnblog/2018/07/06/使用Python创建你自己的CLI工具箱/" >使用Python的Plumbum库创建你自己的CLI工具箱</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/29</span><a class="archive-post-title" href= "/kahnblog/2018/06/29/Python3学习笔记/" >Python3学习笔记</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/03</span><a class="archive-post-title" href= "/kahnblog/2018/05/03/用Android-productFlavors-构建你的多面应用/" >用Android productFlavors 构建你的多面应用 </a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/kahnblog/2017/12/05/Annotation-Processing-Tool/" >Annotation Processing Tool</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/29</span><a class="archive-post-title" href= "/kahnblog/2017/11/29/ASM全解析/" >ASM全解析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/23</span><a class="archive-post-title" href= "/kahnblog/2017/11/23/Git常用命令备忘/" >Git常用命令备忘</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/17</span><a class="archive-post-title" href= "/kahnblog/2017/11/17/搭建Jenkins-Git-Gradle持续集成CI打包平台/" >搭建Jenkins+Git+Gradle持续集成CI打包平台</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/kahnblog/2017/10/30/Java-7-and-Java-8特性你有用过吗？一/" >Java 7 and Java 8特性你有用过吗？二</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/kahnblog/2017/09/27/Java-7-and-Java-8特性你有用过吗？/" >Java 7 and Java 8特性你有用过吗？一</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/19</span><a class="archive-post-title" href= "/kahnblog/2017/09/19/Android原生app加载RN界面原理/" >Android原生app加载RN界面过程</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/15</span><a class="archive-post-title" href= "/kahnblog/2017/09/15/RN环境-Android原生和JS交互/" >RN环境 Android原生和JS交互</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/14</span><a class="archive-post-title" href= "/kahnblog/2017/09/14/Dagger-2-迁移方案和生成代码基本原理/" >Dagger 2 迁移方案和生成代码基本原理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/14</span><a class="archive-post-title" href= "/kahnblog/2017/09/14/EventBus3-0源代码全解析/" >EventBus3.0源代码全解析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/kahnblog/2017/09/12/Android集成RN/" >现有原生Android应用集成RN（React Native Android）开发环境</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/11</span><a class="archive-post-title" href= "/kahnblog/2017/09/11/你还敢说精通Java吗？/" >你还敢说精通Java吗？</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/08</span><a class="archive-post-title" href= "/kahnblog/2017/09/08/开源许可证/" >开源许可证文章整理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/08</span><a class="archive-post-title" href= "/kahnblog/2017/09/08/Markdown-Help/" >Markdown Help</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2014 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/11</span><a class="archive-post-title" href= "/kahnblog/2014/06/11/UML复习备忘录/" >UML复习备忘录</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">Sofeware</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Tools</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Reproduced</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Software</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Java</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Android</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">RN</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Dagger</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">EventBus</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Python3</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Python</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/kahnblog/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+

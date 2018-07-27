@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        Java 7 and Java 8特性你有用过吗？一 · Kahn&#39;s blogs
+        
+    </title>
+    <link rel="icon" href= /assests/favicon.ico>
+    <!-- 提前加载place holder  -->
+    <style>
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url('/kahnblog/font/Oswald-Regular.ttf');
+        }
+        @font-face {
+            font-family: 'Source Sans Pro';
+            src: url('/kahnblog/font/Source Sans Pro.woff'),
+            url('/kahnblog/font/Source Sans Pro.woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Source Code Pro';
+            src: url('/kahnblog/font/SourceCodePro-Regular.ttf.woff'),
+            url('/kahnblog/font/SourceCodePro-Regular.ttf.woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        
+        .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0px;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        99% {
+            transform: translate3d(0, 0, 0);
+        }
+        99.1% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(-226px, 0, 0);
+        }
+    }
+    </style>
+    <link rel="stylesheet" href="/kahnblog/css/style.css">
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/kahnblog/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/kahnblog/" >Kahn&#39;s blogs</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">Java 7 and Java 8特性你有用过吗？一</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/kahnblog/>Kahn's blogs</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+    
+    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            Java 7 and Java 8特性你有用过吗？一
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+        </p>
+        <!-- 404 -->
+        
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = Java>Java</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/09/27</span>
+            </div>
+            <!-- 
+
+<div class="post-share iconfont-archer">
+    <ul class="share-box" data-href = "/kahnblog/2017/09/27/Java-7-and-Java-8特性你有用过吗？/" data-title = "Java 7 and Java 8特性你有用过吗？一" >
+        <li class="to-weibo">分享到微博</li>
+        <li class="to-wechat">分享到微信</li>
+        <li class="to-qq">分享到QQ</li>
+        <li class="to-twitter">分享到twitter</li>
+    </ul>
+</div> -->
+        
+    </div>
+</div>
+        <div class="container">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="前言-Hello-Java"><a href="#前言-Hello-Java" class="headerlink" title="前言 Hello Java"></a>前言 Hello Java</h1><p>刚入行的时候公司还在用1.4，当时要做一个PC客户端的房间清洁程序的界面需要用的AWT一些皮肤组件，就申请公司全面升级到1.5，后来入了android的坑后升级到1.6。在用1.6的时候公司还是有一些服务器安装的是1.4or1.5。感觉只有刚接触1.6的时候学习了1.6的新语法和类，一直都没有再去看java新的特性。android始终比java社区慢了一部，眼瞅着9就出来，这些年，我们还在用jdk7，而且使用的还是1.6学习的语法。在这里记录一下java7，8的特性，以做备忘。能有新的东西还是用起来。Java一直在变，而我们却原地踏步，这样不行。</p>
+<h2 id="Java语言与Java平台"><a href="#Java语言与Java平台" class="headerlink" title="Java语言与Java平台"></a>Java语言与Java平台</h2><h3 id="跨平台"><a href="#跨平台" class="headerlink" title="跨平台"></a>跨平台</h3><p>刚开始接触Java的时候，Java就是Java还能是什么别的？后来才知道JVM上还能跑别的语言的编译后的中间文件。众所周知Java是以跨平台起家的，后来又因J2EE称霸了语言界一段时间，使用率高居榜首。</p>
+<p><em>Java语言执行过程 .java—javac—&gt;.class—-类加载器—-&gt;(转换后的.class—-解释器—–&gt;可执行代码—-JIT编译器—-&gt;二进制机器码)</em></p>
+<p>在不同的操作系统平台上由于JVM的特殊实现不同，就实现了跨平台运行，同一份class文件，可以run all。说下转换后的.class，一些系统级框架，比如spring，会在特殊时期修改调整我们编译出的.class文件形成新的.class，这项技术现在在android开发中也被大量使用。</p>
+<p>我工作过的一家公司就是因为跨平台的特性而选择Java做为开发语言的。这家公司做的是KTV点歌系统，android刚出的时候，公司就想做移动点歌。我进去就是负责android端和服务端开发。做服务端的时候做了一个服务程序（Jar运行的程序），来接收一个ktv所有的移动端长连接，进行点歌操作。这台服务器是Linux的。后来为了给小型酒吧提供这种服务，用android盒子作为服务器。之前的服务端程序（Jar包）直接平移到android盒子上，试了一下，能用。</p>
+<p>做这个程序也是经历了Java版本升级的阵痛。刚开始这个服务端使用的是Java的io包api，后来，由于很多急促的短连接（有个业务需要即连即断）造成并发问题，线程执行过慢，重构了整个项目，使用了Java的nio，当时真是累的够呛。效果也是显著的。</p>
+<h3 id="跨语言"><a href="#跨语言" class="headerlink" title="跨语言"></a>跨语言</h3><p>一直沉醉在Java语言的世界里，直到Android Studio出来之后才知道，哦，原来JVM还可以运行别的语言。区别就在编译后的.class文件上。整个Java生态有两个重要的规范。JSL和VMSpec，一个是Java语言的规范，一个是JVM虚拟机的规范。而在Java 7之后，VMSpec已经不引用JSL的任何内容了，这给了别的语言更多的机会。Java不在独得皇上恩宠。</p>
+<h1 id="Java-7"><a href="#Java-7" class="headerlink" title="Java 7"></a>Java 7</h1><h2 id="语法特性"><a href="#语法特性" class="headerlink" title="语法特性"></a>语法特性</h2><ol>
+<li>switch终于支持String类型的常量了，毕竟String也是常量。</li>
+<li>天天撸二进制的哥哥可以用二进制来表示int型了。还支持下划线分割。<ul>
+<li>int i = 0b1110_1001;</li>
+<li>long x = 223414_234234_234234L</li>
+</ul>
+</li>
+<li><p>异常语法</p>
+<ul>
+<li><p>多捕获</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span>() &#123;</div><div class="line">&#125; <span class="keyword">catch</span>(XxxException e | YyyException e) &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以把同一类的，需要统一处理异常在一个代码块里捕获统一处理</p>
+</li>
+<li><p>final重抛</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span>() &#123;</div><div class="line">&#125; <span class="keyword">catch</span>(<span class="keyword">final</span> Exception e) &#123;</div><div class="line">	<span class="keyword">throw</span> e;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样做，不管你捕获到的异常类型是什么，重新抛出的都是真实的异常对象，而不是被掩盖后的Exception类型。</p>
+</li>
+</ul>
+</li>
+<li><p>try-with-resources<br> java有很多套路代码，而且不写会粗大事，try-with-resources就是为了解决资源关闭的套路而来。</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span> (InputStream inputStream = <span class="keyword">new</span> FileInputStream(<span class="string">""</span>))&#123;</div><div class="line"></div><div class="line">           inputStream.read();</div><div class="line">       &#125; <span class="keyword">catch</span> (IOException e1) &#123;</div><div class="line"></div><div class="line">       &#125;</div></pre></td></tr></table></figure>
+<p> 这么撸一下，就不用写关闭代码了。只有实现java.lang.AutoCloseable接口的资源才能这么干，java7重写了Closeable接口，Closeable继承自AutoCloseable。需要注意的是，如果用try-with-resources，就不要使用匿名写法申请资源了。</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span> (ObjectInputStream inputStream = <span class="keyword">new</span> ObjectInputStream(<span class="keyword">new</span> FileInputStream(<span class="string">""</span>)))&#123;</div><div class="line">       inputStream.read();</div><div class="line">   &#125; <span class="keyword">catch</span> (IOException e1) &#123;</div><div class="line"></div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p> 上面这段代码如果创建ObjectInputStream失败的话，new出来的FileInputStream资源对象就不会被关闭了</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"> <span class="keyword">try</span> (FileInputStream fis = <span class="keyword">new</span> FileInputStream(<span class="string">""</span>); ObjectInputStream inputStream = <span class="keyword">new</span> ObjectInputStream(fis))&#123;</div><div class="line"></div><div class="line">    inputStream.read();</div><div class="line">&#125; <span class="keyword">catch</span> (IOException e1) &#123;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p> 分开撸最稳妥了。<br> 最操蛋的是，如果想在android上面用，最低支持API19。</p>
+</li>
+</ol>
+<h2 id="新的API"><a href="#新的API" class="headerlink" title="新的API"></a>新的API</h2><ol>
+<li>新的文件操作 java.nio.file 新增的api</li>
+<li><em>Path：</em> java 7对文件系统的描述采用了新的机制Path，为兼容以前版本，Path和File可以互转。Path只描述路径，运行时才会和物理路径绑定在一起。Paths为Path的帮助类。这也是Java的传统了，一般api类名后加个s就是相关工具类。与Path一起新增了很多工具类。都在java.nio.file下。</li>
+<li><em>Files：</em> 这个工具类配合Path使用简直6的很，对文件的复制，移动，遍历目录树都差不多是一键式的。详细情况请查阅API.</li>
+<li><em>文件特性和WatchService：</em> 新的文件操作可以获取更多操作系统相关的信息。比如最近更新时间等等，以前根本获取不到。还有WatchService，可以监控文件的改变，简直是还在用轮训扫描文件变化的小伙伴的福音。还有方便的FileChannel</li>
+<li><p><em>NIO：</em> 既然包名都带有nio字样了，肯定也提供的非阻塞的io操作。java.nio在java 1.4就添加在了java api当中，但是据我所知用的人并不多。这是一个很牛逼的东西。先说下网络套接字的nio：在我刚开始写一个后端KTV点歌服务程序的时候，首先想到的是模仿聊天室写。网上搜到的例子全是阻塞式的。大概的代码样式应该是 </p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Serversocket server = ...</div><div class="line"><span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</div><div class="line">	Socket socket = server.accept();</div><div class="line">	ThreadPool.execute(<span class="keyword">new</span> MySocketThread(socket));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p> 主线程死循环无限接收socket链接，然后启动线程处理单个长连接。要启动的线程数量不说，基本没有什么把控可讲。并发量低，对于短促的数据连接，吞吐量也是低的令人发指。这些都不是我发现nio的契机。当这个服务程序上线后，客户反馈，有的pad连接上后点不了歌，过不久后台服务程序就死了。简直见了鬼了，在网络特差的部分Linux服务器上，阻塞式的socket会阻塞在read上无法响应，设置超时也没用。后来加入心跳机制，自己做超时，检测到无响应的socket就close。更是活见过鬼，close也无法让那个阻塞的read抛出异常。当时简直快要崩溃了，说好的close就抛异常呢？后来公司同事做C++的问我，你们java没选择器，通道这些东西吗？然后各种百度，才发现nio。然而资料非常少，也是磕磕绊绊才把程序从io转到nio上。刚接触nio一堆buffer类都能让人弄崩溃。回归正题：Java 7带来了新的文件nio，AsynchronousFileChannel。如果先用相关nio，首先想到的应该是去翻看java.nio包下的东西。channel是个好东西！</p>
+</li>
+<li><p>详细的说下AsynchronousFileChannel，AsynchronousServerSocketChannel，AsynchronousSocketChannel这三个东东。三个东西都差不多，都是自带并发的数据处理通道。见名知意，第一个是处理文件的，后两个一个处理serversocket，一个处理socket。重点说下AsynchronousFileChannel，因为其他两个都差不多。</p>
+<ul>
+<li>这玩意自带线程池（注意：会和其他通道共用），也可以自己传入线程池。</li>
+<li><p>这玩意的读写都是非阻塞的，会交给线程池自动处理。所以，它的read，write方法不会阻塞主线程。翻看api，每个read，write方法都有两个重载方法，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">	</div><div class="line"><span class="function"><span class="keyword">abstract</span> Future&lt;Integer&gt;	<span class="title">read</span><span class="params">(ByteBuffer dst, <span class="keyword">long</span> position)</span></span></div><div class="line">Reads a sequence of bytes from <span class="keyword">this</span> channel into the given buffer, starting at the given file position.</div><div class="line"><span class="keyword">abstract</span> &lt;A&gt; <span class="keyword">void</span>	<span class="title">read</span><span class="params">(ByteBuffer dst, <span class="keyword">long</span> position, A attachment, CompletionHandler&lt;Integer,? <span class="keyword">super</span> A&gt; handler)</span></div><div class="line">Reads a sequence of bytes from <span class="keyword">this</span> channel into the given buffer, starting at the given file position.</div></pre></td></tr></table></figure>
+<p>第一个read返回值为Future<integer>，第二个多了两个参数</integer></p>
+</li>
+<li><p>先说第一个，Future，未来。掌握这个就掌握了未来。这玩意跟线程池中的那一套未来机制是一样的。我们一般使用线程处理问题后，回归主线程分为两种方式，一种是Future，一种是callback。在android中大量使用callback机制。最近领导让优化app启动速度，Future起到了不可磨灭的贡献，但是实现方式不一样。回到这里，我们知道，read后并不阻塞，而是启动了线程去读取文件。这时主线程会往下执行。那么，文件什么时候读好呢？看下Future里面的方法，他是个接口需要我们实现。里面有一个isDone(),返回true的时候，就说明任务已经完成。在主线程里，如果我们必须要用到read后的执行结果了，可以去使用Future对象的isDone()方法查询是否已完成，完成就可以使用Future对象中的get()来获取结果，没有完成再处理别的逻辑，或者wait！。这种是典型的nio非阻塞写法。</p>
+<blockquote>
+<p>在app启动优化中，我使用这种方式。我们知道，本来放在启动中执行的代码，就是非常重要的初始化，而且前后依赖关系非常强，后面的代码依赖前面代码的执行结果，而且这些代码非要在主线程中执行。<br>在主线程中必须执行的代码，还依赖一个可以在线程中执行的任务的结果时，我们就可以采用这种Future未来式的方案。启动线程和主线程并发执行任务，当主线程遇到必要结果时，则等待线程处理结果。<br>在android没有这样的api，使用的是CountDown方式</p>
+</blockquote>
+</li>
+<li><p>Callback就是经常用的回调方式。但是无法与主线程通信。在AsynchronousFileChannel中，CompletionHandler接口就是这个回调，它有成功和失败两个方法。</p>
+</li>
+<li>AsynchronousServerSocketChannel，AsynchronousSocketChannel和上面的处理方式差不多。</li>
+</ul>
+</li>
+<li><p>java.nio.channels包中还很有多好用的东西，用到的时候再去看也不晚。有网络相关操作的，先去库里八一八。</p>
+</li>
+<li><p>新的并发组件，可以去java.util.concurrent中看一下。里面大部分还都是1.5就已经加入了的。如果有并发需求，建议还是把java.util.concurrent库中的类全部熟悉一遍绝对可以事半功倍，concurrent库算是java里面比较高端的库了，简单调几个熟悉的说一下。</p>
+<ul>
+<li>Future就是这个库里面</li>
+<li>我们熟悉的Executor套件，也都是这个库里面的。我曾经自己写过线程池，原因就是不知道它。可见知识空白多么可怕。</li>
+<li>ConcurrentMap接口的实现类，都是自带并发安全的数据类。在并发环境下可以直接使用，不要再写synchronized来互斥读写了。</li>
+<li>BlockingQueue：自带阻塞的生产者/消费者模式队列。</li>
+<li>fock/join模型ForkJoinTask：可以拆分一些互相不依赖结果的任务并发执行，全部执行完毕后，合并所有并发的结果再继续执行。app启动明显就是这样的。从Application的oncreate执行为开始，到第一个界面的oncreate执行为结束。这个开始和结束中间执行的代码，如果是互相不依赖结果，并且不是必须在主线程中执行的代码，可以拆分任务，使用fock/join模型并发执行。<em>在主线程中，还有一种拆分场景：</em>我们知道，主线程执行都是由Looper死循环取出message来执行的，当其中一个message执行时间过长就会出现ANR，如果把一个执行时间为3s（当然在android中不太可能在主线程执行一个3s的方法，这里只是举个栗子）的方法，拆分成10个执行时间为300ms的任务分别扔到Looper中执行，是不是可以降低ANR的几率？分析过EventBus的代码，它就是这么干的。<a href="https://segmentfault.com/a/1190000000377675?utm_source=tuicool" target="_blank" rel="external">fock/join参考文章</a></li>
+<li>java.util.concurrent和其子包还有很多好玩的东西，这里不一一复述了。</li>
+</ul>
+</li>
+<li><p>新的反射api，方法句柄MethodHandler，这是java 7新加入的包，java.lang.invoke</p>
+<ul>
+<li>和反射机制不同，方法句柄是JVM层面的调用，而反射是java api。</li>
+<li>经查询网络资料，在有预热（编译模式和解释模式：区别为有无JIT参与。现在虚拟机都是混合模式）情况下，JIT干预编译，大批量调用下，反射比MethodHandler更快。</li>
+<li>在无预热情况下，MethodHandler更快，和普通调用相差不大。</li>
+<li>看起来是个鸡肋，但是，我觉得java新加入这样一个工具包不会毫无用处吧？最起码套路代码比反射要简单许多。</li>
+</ul>
+</li>
+<li>新的字节码命令：invokedynamic，这玩意可以延迟决定调用哪个方法，这是虚拟机层面的。java代码层面无法触发，ASM这样的能修改字节码的类库已经都有支持了。</li>
+<li>新的垃圾回收器G1，可以干预部分细节的垃圾回收期，例如：GC时所有线程暂定的时间和GC频率。</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这都快Java 9了，java7都没了解过，想想其实也是有点尴尬。因为从事android开发，对java原生的迭代并不敏感。话说，android的java原生支持更新也太慢了。写这篇博文的时候，迎来好消息，<a href="https://developer.android.google.cn/studio/releases/index.html#3-0-0" target="_blank" rel="external">Android Studio迎来了3.0的更新</a>，</p>
+<blockquote>
+<p>Support for Java 8 libraries and Java 8 language features (without the Jack compiler).</p>
+</blockquote>
+<p>看到这个真是略感开心。下周要紧急的看Java8相关的东西了。</p>
+<p>说回这篇博文有关的Java 7，给我的最大感受就是JVM越来越不是Java的了。就像开篇讲的那样，Java的规范和JVM规范彻底分开，在看看那<a href="!https://kahnsen.github.io/kahnblog/2017/09/11/%E4%BD%A0%E8%BF%98%E6%95%A2%E8%AF%B4%E7%B2%BE%E9%80%9AJava%E5%90%97%EF%BC%9F/">JVM相关语言的海盗图</a>，可怕，再不学几门JVM语言就老了。既然是Anroid开发，就从Kotlin开始吧！这篇博文还有很多不足之处，有空再回来添加，修改吧。</p>
+<h2 id="下片博文撸下Java8的东西，记录一下。"><a href="#下片博文撸下Java8的东西，记录一下。" class="headerlink" title="下片博文撸下Java8的东西，记录一下。"></a>下片博文撸下Java8的东西，记录一下。</h2>
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+            <li class="previous">
+                <a href= "/kahnblog/2017/10/30/Java-7-and-Java-8特性你有用过吗？一/" title= Java 7 and Java 8特性你有用过吗？二 >
+                    <span>Previous Post</span>
+                    <span>Java 7 and Java 8特性你有用过吗？二</span>
+                </a>
+            </li>
+        
+        
+            <li class="next">
+                <a href= "/kahnblog/2017/09/19/Android原生app加载RN界面原理/" title= Android原生app加载RN界面过程 >
+                    <span>Next Post</span>
+                    <span>Android原生app加载RN界面过程</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 来必力City版安装代码 -->
+
+    
+
+<!-- City版安装代码已完成 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="emailto:kahn_2009@live.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/kahnsen" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span>
+        <span
+            id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_pv"></span>
+        </span>
+    </div>
+    
+</footer>
+    </div>
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-category">
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 19 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/20</span><a class="archive-post-title" href= "/kahnblog/2018/07/20/Flutter了解一下？/" >Flutter了解一下？</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span><a class="archive-post-title" href= "/kahnblog/2018/07/06/使用Python创建你自己的CLI工具箱/" >使用Python的Plumbum库创建你自己的CLI工具箱</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/29</span><a class="archive-post-title" href= "/kahnblog/2018/06/29/Python3学习笔记/" >Python3学习笔记</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/03</span><a class="archive-post-title" href= "/kahnblog/2018/05/03/用Android-productFlavors-构建你的多面应用/" >用Android productFlavors 构建你的多面应用 </a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/kahnblog/2017/12/05/Annotation-Processing-Tool/" >Annotation Processing Tool</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/29</span><a class="archive-post-title" href= "/kahnblog/2017/11/29/ASM全解析/" >ASM全解析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/23</span><a class="archive-post-title" href= "/kahnblog/2017/11/23/Git常用命令备忘/" >Git常用命令备忘</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/17</span><a class="archive-post-title" href= "/kahnblog/2017/11/17/搭建Jenkins-Git-Gradle持续集成CI打包平台/" >搭建Jenkins+Git+Gradle持续集成CI打包平台</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/kahnblog/2017/10/30/Java-7-and-Java-8特性你有用过吗？一/" >Java 7 and Java 8特性你有用过吗？二</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/kahnblog/2017/09/27/Java-7-and-Java-8特性你有用过吗？/" >Java 7 and Java 8特性你有用过吗？一</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/19</span><a class="archive-post-title" href= "/kahnblog/2017/09/19/Android原生app加载RN界面原理/" >Android原生app加载RN界面过程</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/15</span><a class="archive-post-title" href= "/kahnblog/2017/09/15/RN环境-Android原生和JS交互/" >RN环境 Android原生和JS交互</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/14</span><a class="archive-post-title" href= "/kahnblog/2017/09/14/Dagger-2-迁移方案和生成代码基本原理/" >Dagger 2 迁移方案和生成代码基本原理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/14</span><a class="archive-post-title" href= "/kahnblog/2017/09/14/EventBus3-0源代码全解析/" >EventBus3.0源代码全解析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/kahnblog/2017/09/12/Android集成RN/" >现有原生Android应用集成RN（React Native Android）开发环境</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/11</span><a class="archive-post-title" href= "/kahnblog/2017/09/11/你还敢说精通Java吗？/" >你还敢说精通Java吗？</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/08</span><a class="archive-post-title" href= "/kahnblog/2017/09/08/开源许可证/" >开源许可证文章整理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/08</span><a class="archive-post-title" href= "/kahnblog/2017/09/08/Markdown-Help/" >Markdown Help</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2014 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/11</span><a class="archive-post-title" href= "/kahnblog/2014/06/11/UML复习备忘录/" >UML复习备忘录</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">Sofeware</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Tools</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Reproduced</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Software</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Java</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Android</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">RN</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Dagger</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">EventBus</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Python3</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Python</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/kahnblog/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+

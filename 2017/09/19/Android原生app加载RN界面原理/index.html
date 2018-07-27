@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        Android原生app加载RN界面过程 · Kahn&#39;s blogs
+        
+    </title>
+    <link rel="icon" href= /assests/favicon.ico>
+    <!-- 提前加载place holder  -->
+    <style>
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url('/kahnblog/font/Oswald-Regular.ttf');
+        }
+        @font-face {
+            font-family: 'Source Sans Pro';
+            src: url('/kahnblog/font/Source Sans Pro.woff'),
+            url('/kahnblog/font/Source Sans Pro.woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Source Code Pro';
+            src: url('/kahnblog/font/SourceCodePro-Regular.ttf.woff'),
+            url('/kahnblog/font/SourceCodePro-Regular.ttf.woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        
+        .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0px;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        99% {
+            transform: translate3d(0, 0, 0);
+        }
+        99.1% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(-226px, 0, 0);
+        }
+    }
+    </style>
+    <link rel="stylesheet" href="/kahnblog/css/style.css">
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/kahnblog/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/kahnblog/" >Kahn&#39;s blogs</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">Android原生app加载RN界面过程</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/kahnblog/>Kahn's blogs</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+    
+    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            Android原生app加载RN界面过程
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+        </p>
+        <!-- 404 -->
+        
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = Android>Android</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = RN>RN</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/09/19</span>
+            </div>
+            <!-- 
+
+<div class="post-share iconfont-archer">
+    <ul class="share-box" data-href = "/kahnblog/2017/09/19/Android原生app加载RN界面原理/" data-title = "Android原生app加载RN界面过程" >
+        <li class="to-weibo">分享到微博</li>
+        <li class="to-wechat">分享到微信</li>
+        <li class="to-qq">分享到QQ</li>
+        <li class="to-twitter">分享到twitter</li>
+    </ul>
+</div> -->
+        
+    </div>
+</div>
+        <div class="container">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><a href="/kahnblog/2017/09/12/Android%E9%9B%86%E6%88%90RN/">现有原生Android应用集成RN（React Native Android）开发环境</a><br><a href="/kahnblog/2017/09/15/RN%E7%8E%AF%E5%A2%83-Android%E5%8E%9F%E7%94%9F%E5%92%8CJS%E4%BA%A4%E4%BA%92/">RN环境 Android原生和JS交互Android RN</a></p>
+<p>两篇博客中介绍了RN集成原生app和原生和js互动的基本原理。其中第一篇<a href="/kahnblog/2017/09/12/Android%E9%9B%86%E6%88%90RN/">现有原生Android应用集成RN（React Native Android）开发环境</a>里面的Activity的例子是从官网上直接copy过来的，能运行起来但是一知半解。这篇blog记录一下RN界面是怎么加载到我们原生Activity上的。</p>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>在这个例子中<a href="/kahnblog/2017/09/12/Android%E9%9B%86%E6%88%90RN/">现有原生Android应用集成RN（React Native Android）开发环境</a>，范例Activity使用的是自己原生的纯纯的Activity来加载RN界面。其实RN官方给我们提供了一个com.facebook.react.ReactActivity来让我们继承使用，它继承自24k纯Activity，ReactActivity里面包含了怎么加载RN界面的方法。分析一下这个类，就能知道原生Activity怎么加载RN界面的了。</p>
+<p>老规矩，成员要先上代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Copyright (c) 2015-present, Facebook, Inc.</div><div class="line"> * All rights reserved.</div><div class="line"> *</div><div class="line"> * This source code is licensed under the BSD-style license found in the</div><div class="line"> * LICENSE file in the root directory of this source tree. An additional grant</div><div class="line"> * of patent rights can be found in the PATENTS file in the same directory.</div><div class="line"> */</div><div class="line"></div><div class="line"><span class="keyword">package</span> com.facebook.react;</div><div class="line"></div><div class="line"><span class="keyword">import</span> javax.annotation.Nullable;</div><div class="line"></div><div class="line"><span class="keyword">import</span> android.app.Activity;</div><div class="line"><span class="keyword">import</span> android.content.Intent;</div><div class="line"><span class="keyword">import</span> android.os.Bundle;</div><div class="line"><span class="keyword">import</span> android.view.KeyEvent;</div><div class="line"></div><div class="line"><span class="keyword">import</span> com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;</div><div class="line"><span class="keyword">import</span> com.facebook.react.modules.core.PermissionAwareActivity;</div><div class="line"><span class="keyword">import</span> com.facebook.react.modules.core.PermissionListener;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Base Activity for React Native applications.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ReactActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span></span></div><div class="line">        <span class="keyword">implements</span> <span class="title">DefaultHardwareBackBtnHandler</span>, <span class="title">PermissionAwareActivity</span> &#123;</div><div class="line"></div><div class="line">  <span class="keyword">private</span> <span class="keyword">final</span> ReactActivityDelegate mDelegate;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">protected</span> <span class="title">ReactActivity</span><span class="params">()</span> </span>&#123;</div><div class="line">    mDelegate = createReactActivityDelegate();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">/**</span></div><div class="line">   * Returns the name of the main component registered from JavaScript.</div><div class="line">   * This is used to schedule rendering of the component.</div><div class="line">   * e.g. "MoviesApp"</div><div class="line">   */</div><div class="line">  <span class="keyword">protected</span> <span class="meta">@Nullable</span> <span class="function">String <span class="title">getMainComponentName</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">/**</span></div><div class="line">   * Called at construction time, override if you have a custom delegate implementation.</div><div class="line">   */</div><div class="line">  <span class="function"><span class="keyword">protected</span> ReactActivityDelegate <span class="title">createReactActivityDelegate</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ReactActivityDelegate(<span class="keyword">this</span>, getMainComponentName());</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">    mDelegate.onCreate(savedInstanceState);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPause</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">super</span>.onPause();</div><div class="line">    mDelegate.onPause();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onResume</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">super</span>.onResume();</div><div class="line">    mDelegate.onResume();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">super</span>.onDestroy();</div><div class="line">    mDelegate.onDestroy();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivityResult</span><span class="params">(<span class="keyword">int</span> requestCode, <span class="keyword">int</span> resultCode, Intent data)</span> </span>&#123;</div><div class="line">    mDelegate.onActivityResult(requestCode, resultCode, data);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onKeyUp</span><span class="params">(<span class="keyword">int</span> keyCode, KeyEvent event)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> mDelegate.onKeyUp(keyCode, event) || <span class="keyword">super</span>.onKeyUp(keyCode, event);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onBackPressed</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (!mDelegate.onBackPressed()) &#123;</div><div class="line">      <span class="keyword">super</span>.onBackPressed();</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">invokeDefaultOnBackPressed</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">super</span>.onBackPressed();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNewIntent</span><span class="params">(Intent intent)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (!mDelegate.onNewIntent(intent)) &#123;</div><div class="line">      <span class="keyword">super</span>.onNewIntent(intent);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">requestPermissions</span><span class="params">(</span></span></div><div class="line">          String[] permissions,</div><div class="line">          <span class="keyword">int</span> requestCode,</div><div class="line">          PermissionListener listener) &#123;</div><div class="line">    mDelegate.requestPermissions(permissions, requestCode, listener);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onRequestPermissionsResult</span><span class="params">(</span></span></div><div class="line">          <span class="keyword">int</span> requestCode,</div><div class="line">          String[] permissions,</div><div class="line">          <span class="keyword">int</span>[] grantResults) &#123;</div><div class="line">    mDelegate.onRequestPermissionsResult(requestCode, permissions, grantResults);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> ReactNativeHost <span class="title">getReactNativeHost</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> mDelegate.getReactNativeHost();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> ReactInstanceManager <span class="title">getReactInstanceManager</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> mDelegate.getReactInstanceManager();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">loadApp</span><span class="params">(String appKey)</span> </span>&#123;</div><div class="line">    mDelegate.loadApp(appKey);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>非常干净的一个类，它做了什么？</p>
+<ol>
+<li>构造函数里生成一个com.facebook.react.ReactActivityDelegate对象，并把自己(this)和MainComponentName传给这个委托对象</li>
+<li>在Activity的生命周期回调里，都调用了委托对象的对应方法。换句话说就是，把Activity的生命周期都委托的这个对象处理。</li>
+<li>对外公开了几个mDelegate的方法来获取ReactInstanceManager，ReactNativeHost。提供了一个loadApp方法，同样，也是调用了mDelegate的loadApp方法</li>
+<li>实现了两个接口DefaultHardwareBackBtnHandler，PermissionAwareActivity。<ul>
+<li>DefaultHardwareBackBtnHandler 用提供默认的回退键处理方式</li>
+<li>PermissionAwareActivity 提供了回调权限相关的东西，android从api23(6.0)，权限就改了及用机申请的模式</li>
+</ul>
+</li>
+</ol>
+<p>典型的委托模式，所有东西都交给了ReactActivityDelegate来处理。不但简化的Activity的逻辑，而且可以把这个委托对象复用给Fragment。几乎所有逻辑都在ReactActivityDelegate里面了，下面来看下ReactActivityDelegate。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">ReactActivityDelegate</span><span class="params">(Activity activity, @Nullable String mainComponentName)</span> </span>&#123;</div><div class="line">  mActivity = activity;</div><div class="line">  mMainComponentName = mainComponentName;</div><div class="line">  mFragmentActivity = <span class="keyword">null</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>ReactActivityDelegate持有Activity的引用和一个字符串类型的mainComponentName<br>先看oncreate</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">  <span class="keyword">boolean</span> needsOverlayPermission = <span class="keyword">false</span>;</div><div class="line">  <span class="keyword">if</span> (getReactNativeHost().getUseDeveloperSupport() &amp;&amp; Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.M) &#123;</div><div class="line">    <span class="comment">// Get permission to show redbox in dev builds.</span></div><div class="line">    <span class="keyword">if</span> (!Settings.canDrawOverlays(getContext())) &#123;</div><div class="line">      needsOverlayPermission = <span class="keyword">true</span>;</div><div class="line">      Intent serviceIntent = <span class="keyword">new</span> Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse(<span class="string">"package:"</span> + getContext().getPackageName()));</div><div class="line">      FLog.w(ReactConstants.TAG, REDBOX_PERMISSION_MESSAGE);</div><div class="line">      Toast.makeText(getContext(), REDBOX_PERMISSION_MESSAGE, Toast.LENGTH_LONG).show();</div><div class="line">      ((Activity) getContext()).startActivityForResult(serviceIntent, REQUEST_OVERLAY_PERMISSION_CODE);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">if</span> (mMainComponentName != <span class="keyword">null</span> &amp;&amp; !needsOverlayPermission) &#123;</div><div class="line">    loadApp(mMainComponentName);</div><div class="line">  &#125;</div><div class="line">  mDoubleTapReloadRecognizer = <span class="keyword">new</span> DoubleTapReloadRecognizer();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>前面的代码都是一些调试用的界面加载，关键代码是loadApp(mMainComponentName);</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">loadApp</span><span class="params">(String appKey)</span> </span>&#123;</div><div class="line">  <span class="keyword">if</span> (mReactRootView != <span class="keyword">null</span>) &#123;</div><div class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Cannot loadApp while app is already running."</span>);</div><div class="line">  &#125;</div><div class="line">  mReactRootView = createRootView();</div><div class="line">  mReactRootView.startReactApplication(</div><div class="line">          getReactNativeHost().getReactInstanceManager(),</div><div class="line">          appKey,</div><div class="line">          getLaunchOptions());</div><div class="line">  getPlainActivity().setContentView(mReactRootView);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>先是创建了一个ReactRootView对象，然后调用ReactRootView对象的startReactApplication方法。再然后，使用持有的activity直接setContentView，搞定！这样就把RN界面加载到activity上了。核心点还是这个ReactRootView，它其实是一个FrameLayout，所以能直接使用setContentView设置到布局上，其实在xml写上它。findbyid出来，然后调用startReactApplication初始化一下，其实是一样的。所以！关键还在startReactApplication上。<br>看下它的三个参数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startReactApplication</span><span class="params">(</span></span></div><div class="line">      ReactInstanceManager reactInstanceManager,</div><div class="line">      String moduleName,</div><div class="line">      @Nullable Bundle launchOptions)</div></pre></td></tr></table></figure>
+<p>ReactInstanceManager对象由自己的建造者模式生成，可以设置一些属性。<br>moduleName就是moduleName，不知道怎么用言语表达。<br>看下这个方法都干了啥</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">  <span class="comment">/**</span></div><div class="line">   * Schedule rendering of the react component rendered by the JS application from the given JS</div><div class="line">   * module (@&#123;param moduleName&#125;) using provided &#123;<span class="doctag">@param</span> reactInstanceManager&#125; to attach to the</div><div class="line">   * JS context of that manager. Extra parameter &#123;<span class="doctag">@param</span> launchOptions&#125; can be used to pass initial</div><div class="line">   * properties for the react component.</div><div class="line">   */</div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startReactApplication</span><span class="params">(</span></span></div><div class="line">      ReactInstanceManager reactInstanceManager,</div><div class="line">      String moduleName,</div><div class="line">      @Nullable Bundle launchOptions) &#123;</div><div class="line">    UiThreadUtil.assertOnUiThread();</div><div class="line"></div><div class="line">    <span class="comment">// TODO(6788889): Use POJO instead of bundle here, apparently we can't just use WritableMap</span></div><div class="line">    <span class="comment">// here as it may be deallocated in native after passing via JNI bridge, but we want to reuse</span></div><div class="line">    <span class="comment">// it in the case of re-creating the catalyst instance</span></div><div class="line"><span class="comment">//    Assertions.assertCondition(</span></div><div class="line"><span class="comment">//        mReactInstanceManager == null,</span></div><div class="line"><span class="comment">//        "This root view has already been attached to a catalyst instance manager");</span></div><div class="line"></div><div class="line">    <span class="keyword">if</span>(mReactInstanceManager != <span class="keyword">null</span> &amp;&amp; mReactInstanceManager.hasStartedCreatingInitialContext())&#123;</div><div class="line">      mReactInstanceManager.recreateReactContextInBackground();</div><div class="line">      <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line">    mReactInstanceManager = reactInstanceManager;</div><div class="line">    mJSModuleName = moduleName;</div><div class="line">    mLaunchOptions = launchOptions;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (!mReactInstanceManager.hasStartedCreatingInitialContext()) &#123;</div><div class="line">      mReactInstanceManager.createReactContextInBackground();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// We need to wait for the initial onMeasure, if this view has not yet been measured, we set which</span></div><div class="line">    <span class="comment">// will make this view startReactApplication itself to instance manager once onMeasure is called.</span></div><div class="line">    <span class="keyword">if</span> (mWasMeasured) &#123;</div><div class="line">      attachToReactInstanceManager();</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>这个方法先用UiThreadUtil.assertOnUiThread()断言的形式判断了一下是不是在UI线程，如果不是就抛异常中断执行，在RN整个代码中，有大量的断言用法，看到直接忽略就可以了，就是一些数据校验和判断。初始化过程中也都保持在UI线程中执行。方法中先判断持有的mReactInstanceManager为不为空，如果不为空，调用recreateReactContextInBackground，为空的话，再去看看是否已经初始化过了，没有的话调用createReactContextInBackground要去初始化。方法的最后先看了下这个view有没有经过Measured，注释说的很清楚，只有经过Measured的view才能调用attachToReactInstanceManager把自己关联到reactInstanceManager上。ReactRootView的onMeasure方法中其实也有调用attachToReactInstanceManager的代码。<br>上面说了，如果初始化过了会调用recreateReactContextInBackground，没有初始化调用createReactContextInBackground来初始化。其实这两个方法最终都会调到recreateReactContextInBackgroundInner，只不过里面的断言条件不一样。这两个方法都是manager的，自此就进入了mReactInstanceManager的代码里面了，recreateReactContextInBackgroundInner里面前半部分都是调试模式下的代码，最后又调到了recreateReactContextInBackgroundFromBundleLoader。<br>recreateReactContextInBackgroundFromBundleLoader里面只有一句代码，调用了recreateReactContextInBackground方法，它有两个参数。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">recreateReactContextInBackground</span><span class="params">(</span></span></div><div class="line">    JavaScriptExecutor.Factory jsExecutorFactory,</div><div class="line">    JSBundleLoader jsBundleLoader)</div></pre></td></tr></table></figure>
+<p>第一个参数是为了互传数据，互相调用用的，里面是native代码(该native指的是c/c++库)，为了加载js生成的Bundle文件用的。首先我们要注意一点，RN是用JS开发的，但是JS相当于RN的源代码。我们原生应用加载的是Bundle文件，Bundle文件相当于RN的源代码（JS代码）编译后的可执行加载的代码。还要注意版本差异，不同版本编译出来的Bundle文件，在android这边使用不同版本的RN库加载Bundle文件会有差异。最好编译版本和加载版本一致。下面说下recreateReactContextInBackground的代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">recreateReactContextInBackground</span><span class="params">(</span></span></div><div class="line">    JavaScriptExecutor.Factory jsExecutorFactory,</div><div class="line">    JSBundleLoader jsBundleLoader) &#123;</div><div class="line">  UiThreadUtil.assertOnUiThread();</div><div class="line"></div><div class="line">  ReactContextInitParams initParams =</div><div class="line">      <span class="keyword">new</span> ReactContextInitParams(jsExecutorFactory, jsBundleLoader);</div><div class="line">  <span class="keyword">if</span> (mReactContextInitAsyncTask == <span class="keyword">null</span>) &#123;</div><div class="line">    <span class="comment">// No background task to create react context is currently running, create and execute one.</span></div><div class="line">    mReactContextInitAsyncTask = <span class="keyword">new</span> ReactContextInitAsyncTask();</div><div class="line">    mReactContextInitAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, initParams);</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="comment">// Background task is currently running, queue up most recent init params to recreate context</span></div><div class="line">    <span class="comment">// once task completes.</span></div><div class="line">    mPendingReactContextInitParams = initParams;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>看代码它对参数进行了一层封装，就是ReactContextInitParams对象。然后调用过了ReactContextInitAsyncTask的执行方法。ReactContextInitAsyncTask是一个AsyncTask。至此，UI线程中的任务就结束了，后面交给了子线程。去看下ReactContextInitAsyncTask中是怎么执行的。ReactContextInitAsyncTask中的onPreExecute是一些清理工作，直接看doInBackground。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> Result&lt;ReactApplicationContext&gt; <span class="title">doInBackground</span><span class="params">(ReactContextInitParams... params)</span> </span>&#123;</div><div class="line">  <span class="comment">// TODO(t11687218): Look over all threading</span></div><div class="line">  <span class="comment">// Default priority is Process.THREAD_PRIORITY_BACKGROUND which means we'll be put in a cgroup</span></div><div class="line">  <span class="comment">// that only has access to a small fraction of CPU time. The priority will be reset after</span></div><div class="line">  <span class="comment">// this task finishes: https://android.googlesource.com/platform/frameworks/base/+/d630f105e8bc0021541aacb4dc6498a49048ecea/core/java/android/os/AsyncTask.java#256</span></div><div class="line">  Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT);</div><div class="line"></div><div class="line">  Assertions.assertCondition(params != <span class="keyword">null</span> &amp;&amp; params.length &gt; <span class="number">0</span> &amp;&amp; params[<span class="number">0</span>] != <span class="keyword">null</span>);</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    JavaScriptExecutor jsExecutor = params[<span class="number">0</span>].getJsExecutorFactory().create();</div><div class="line">    <span class="keyword">return</span> Result.of(createReactContext(jsExecutor, params[<span class="number">0</span>].getJsBundleLoader()));</div><div class="line">  &#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">    <span class="comment">// Pass exception to onPostExecute() so it can be handled on the main thread</span></div><div class="line">    <span class="keyword">return</span> Result.of(e);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>小知识：子线程运行的第一句代码设置为Process.setThreadPriority(Process.xxx);可以调整线程运行级别，xxx为内置级别。请尽量把线程设置的优先级降低，避免抢占UI线程占用CPU资源而造成卡顿。<br>看下doInBackground都做了什么。从参数0获取之前创建的JsExecutorFactory，然后create一个JavaScriptExecutor，调用createReactContext(jsExecutor, params[0].getJsBundleLoader())返回。这里使用了Result.of这样的返回方式。Result.of是一个封装类，封装了结果和异常信息，主要处理逻辑还在createReactContext里面。<br>下面的代码用注释的形式一一解答</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div></pre></td><td class="code"><pre><div class="line">  <span class="comment">/**</span></div><div class="line">   * <span class="doctag">@return</span> instance of &#123;<span class="doctag">@link</span> ReactContext&#125; configured a &#123;<span class="doctag">@link</span> CatalystInstance&#125; set</div><div class="line">   */</div><div class="line">  <span class="function"><span class="keyword">private</span> ReactApplicationContext <span class="title">createReactContext</span><span class="params">(</span></span></div><div class="line">      JavaScriptExecutor jsExecutor,</div><div class="line">      JSBundleLoader jsBundleLoader) &#123;</div><div class="line">    FLog.i(ReactConstants.TAG, <span class="string">"Creating react context."</span>);</div><div class="line">    ReactMarker.logMarker(CREATE_REACT_CONTEXT_START);</div><div class="line">    <span class="comment">//生成一个ReactApplicationContext，这个ReactApplicationContext继承自ReactContext，而ReactContext又继承自ContextWrapper</span></div><div class="line">    <span class="keyword">final</span> ReactApplicationContext reactContext = <span class="keyword">new</span> ReactApplicationContext(mApplicationContext);</div><div class="line">    <span class="comment">//创建一个原生module生成器，下面会用这个生成器把我们需要注册的原生module类都加载起来</span></div><div class="line">    NativeModuleRegistryBuilder nativeModuleRegistryBuilder = <span class="keyword">new</span> NativeModuleRegistryBuilder(</div><div class="line">      reactContext,</div><div class="line">      mLazyNativeModulesEnabled);</div><div class="line">      <span class="comment">//创建一个JSmodule生成器，下面会用这个生成器把我们需要注册的JSmodule都加载起来，这个加载器是跨语言加载，加载的js</span></div><div class="line">    JavaScriptModuleRegistry.Builder jsModulesBuilder = <span class="keyword">new</span> JavaScriptModuleRegistry.Builder();</div><div class="line">    <span class="keyword">if</span> (mUseDeveloperSupport) &#123;</div><div class="line">      reactContext.setNativeModuleCallExceptionHandler(mDevSupportManager);</div><div class="line">    &#125;</div><div class="line"></div><div class="line"><span class="comment">//下面是一些日志追踪七七八八的</span></div><div class="line">    ReactMarker.logMarker(PROCESS_PACKAGES_START);</div><div class="line">    Systrace.beginSection(</div><div class="line">        TRACE_TAG_REACT_JAVA_BRIDGE,</div><div class="line">        <span class="string">"createAndProcessCoreModulesPackage"</span>);</div><div class="line">    <span class="comment">//RN核心package加载。RN自己也要注册一些module</span></div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">      CoreModulesPackage coreModulesPackage =</div><div class="line">        <span class="keyword">new</span> CoreModulesPackage(</div><div class="line">          <span class="keyword">this</span>,</div><div class="line">          mBackBtnHandler,</div><div class="line">          mUIImplementationProvider,</div><div class="line">          mLazyViewManagersEnabled);</div><div class="line">      processPackage(coreModulesPackage, nativeModuleRegistryBuilder, jsModulesBuilder);</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">      Systrace.endSection(TRACE_TAG_REACT_JAVA_BRIDGE);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// TODO(6818138): Solve use-case of native/js modules overriding</span></div><div class="line">    <span class="comment">//注册我们自己的module（包括原生和js）</span></div><div class="line">    <span class="keyword">for</span> (ReactPackage reactPackage : mPackages) &#123;</div><div class="line">      Systrace.beginSection(</div><div class="line">          TRACE_TAG_REACT_JAVA_BRIDGE,</div><div class="line">          <span class="string">"createAndProcessCustomReactPackage"</span>);</div><div class="line">      <span class="keyword">try</span> &#123;</div><div class="line">        processPackage(reactPackage, nativeModuleRegistryBuilder, jsModulesBuilder);</div><div class="line">      &#125; <span class="keyword">finally</span> &#123;</div><div class="line">        Systrace.endSection(TRACE_TAG_REACT_JAVA_BRIDGE);</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    ReactMarker.logMarker(PROCESS_PACKAGES_END);</div><div class="line"></div><div class="line">    ReactMarker.logMarker(BUILD_NATIVE_MODULE_REGISTRY_START);</div><div class="line">    Systrace.beginSection(TRACE_TAG_REACT_JAVA_BRIDGE, <span class="string">"buildNativeModuleRegistry"</span>);</div><div class="line">    NativeModuleRegistry nativeModuleRegistry;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">       nativeModuleRegistry = nativeModuleRegistryBuilder.build();</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">      Systrace.endSection(TRACE_TAG_REACT_JAVA_BRIDGE);</div><div class="line">      ReactMarker.logMarker(BUILD_NATIVE_MODULE_REGISTRY_END);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    NativeModuleCallExceptionHandler exceptionHandler = mNativeModuleCallExceptionHandler != <span class="keyword">null</span></div><div class="line">        ? mNativeModuleCallExceptionHandler</div><div class="line">        : mDevSupportManager;</div><div class="line">    <span class="comment">//这边是最最的核心。上面那么多，准备这准备那，都是为了这一哆嗦，使用CatalystInstanceImpl的建造者把准备好的东西都set上。</span></div><div class="line">    CatalystInstanceImpl.Builder catalystInstanceBuilder = <span class="keyword">new</span> CatalystInstanceImpl.Builder()</div><div class="line">        .setReactQueueConfigurationSpec(ReactQueueConfigurationSpec.createDefault())</div><div class="line">        .setJSExecutor(jsExecutor)</div><div class="line">        .setRegistry(nativeModuleRegistry)</div><div class="line">        .setJSModuleRegistry(jsModulesBuilder.build())</div><div class="line">        .setJSBundleLoader(jsBundleLoader)</div><div class="line">        .setNativeModuleCallExceptionHandler(exceptionHandler);</div><div class="line"></div><div class="line">    ReactMarker.logMarker(CREATE_CATALYST_INSTANCE_START);</div><div class="line">    <span class="comment">// CREATE_CATALYST_INSTANCE_END is in JSCExecutor.cpp</span></div><div class="line">    Systrace.beginSection(TRACE_TAG_REACT_JAVA_BRIDGE, <span class="string">"createCatalystInstance"</span>);</div><div class="line">    <span class="keyword">final</span> CatalystInstance catalystInstance;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">    <span class="comment">//上面使用建造者模式数据都准备好了，然后build出对象。CatalystInstanceImpl中有大量的jni调用，用户建立起原生和js交互的桥梁</span></div><div class="line">      catalystInstance = catalystInstanceBuilder.build();</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">      Systrace.endSection(TRACE_TAG_REACT_JAVA_BRIDGE);</div><div class="line">      ReactMarker.logMarker(CREATE_CATALYST_INSTANCE_END);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (mBridgeIdleDebugListener != <span class="keyword">null</span>) &#123;</div><div class="line">      catalystInstance.addBridgeIdleDebugListener(mBridgeIdleDebugListener);</div><div class="line">    &#125;</div><div class="line"></div><div class="line"><span class="comment">//初始化reactContext对象，把catalystInstance这玩意穿进去，然后在initializeWithInstance初始化好几个线程队列。</span></div><div class="line">    reactContext.initializeWithInstance(catalystInstance);</div><div class="line">    <span class="comment">//开撸！</span></div><div class="line">    catalystInstance.runJSBundle();</div><div class="line"></div><div class="line">    <span class="keyword">return</span> reactContext;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>核心方法调用了catalystInstance的runJSBundle方法。它内部又调用了之前准备好的mJSBundleLoader的loadScript方法。回到最初的起点，我们创建ReactInstanceManager对象的时候，会然让你设置一个setBundleAssetName或者setJSBundleFile，它在build出ReactInstanceManager对象的时候，会通过JSBundleLoader的静态方法createFileLoader或者createAssetLoader创建出一个JSBundleLoader，参数就是我们的bundle文件的路径（这里路径描述不准确，应该是asset文件夹下的文件名或者文件的全路径）。上面就是用这个JSBunldeLoader对象调用的runJSBundle。来看下runJSBundle的实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">jniSetSourceURL</span><span class="params">(String sourceURL)</span></span>;</div><div class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">jniLoadScriptFromAssets</span><span class="params">(AssetManager assetManager, String assetURL)</span></span>;</div><div class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">jniLoadScriptFromFile</span><span class="params">(String fileName, String sourceURL)</span></span>;</div></pre></td></tr></table></figure>
+<p>当当当！jni的，跟不下去了。结束~打完收工。</p>
+<p>对了，还有最后的，RN的View是怎么挂载到ReactRootView上的。Debug了一下，FaceBook使用了Choreographer机制来传递addview的消息。从Choreographer.doFrame回调到了ChoreographerCompat的内部类FrameCallback中。具体FrameCallback是什么时候注册到Choreographer上去的，还没去看。FrameCallback的实现类为ReactChoreographerDispatcher，这个大哥里面有个callback队列，收到一个doFrame消息，就会执行一遍队列的全部回调，回调的实现在UIViewOperationQueue-&gt;DispatchUIFrameCallback中。DispatchUIFrameCallback中会调用flushPendingBatches方法来顺序执行UIViewOperationQueue持有的mDispatchUIRunnables队列的所有runnale，每一个runnable都是一个UIViewOperationQueue对象，一个UIViewOperationQueue对象代表一个事件，持有一些视图啊之类的东西，最后调用mNativeViewHierarchyManager.manageChildren把持有的视图添加到了之前我们准备好的ReactRootView上。呼呼~~具体UIViewOperationQueue对象何时生成，又何时添加到队列中的，这个之前初始化的时候就已经和c/c++代码绑定上了，应该是c/c++那边添进来的。具体时机不详。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>Activity需要加载的RN的View是ReactRootView，所以，把ReactRootView当成普通的View玩弄即可</li>
+<li>ReactRootView需要调用startReactApplication激活一下。</li>
+<li>基本上所有关于RN配置都在ReactInstanceManager里面，使用ReactInstanceManager的build建造者模式可以构造想要的ReactInstanceManager，一个ReactInstanceManager对应一个bundler文件。在build的时候设置。一个ReactRootView对应一个ReactInstanceManager</li>
+<li>知道这些基本就可以开撸了，剩下无非就是下载bundler文件和一些封装调用</li>
+<li>Facebook的编码风格看起来还是很统一的，大量的build，对象包裹，委托和断言充斥的整个库，最最重要的是他们的过程比较清晰，如果滥用设计模式的话，很有可能比较简单的代码弄得无比繁琐和绕圈子。不能为设计而设计，为了分层而分层。TODO用的也很合理，但是不知道后面的版本到底DO不DO</li>
+</ul>
+<h3 id="完"><a href="#完" class="headerlink" title="完"></a>完</h3><p>最后想说<a href="https://www.zhihu.com/question/65437198" target="_blank" rel="external">如何看待百度要求内部全面停止使用 React / React Native?</a>跟我们有什么关系呢?真上升要去告FaceBook的地步，还是老老实实的用别的技术或者原生吧。小厂还是尽情的用吧。而且，这是前段的事情，俺们一个不沾惹前段的人还是不叽歪了。</p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+            <li class="previous">
+                <a href= "/kahnblog/2017/09/27/Java-7-and-Java-8特性你有用过吗？/" title= Java 7 and Java 8特性你有用过吗？一 >
+                    <span>Previous Post</span>
+                    <span>Java 7 and Java 8特性你有用过吗？一</span>
+                </a>
+            </li>
+        
+        
+            <li class="next">
+                <a href= "/kahnblog/2017/09/15/RN环境-Android原生和JS交互/" title= RN环境 Android原生和JS交互 >
+                    <span>Next Post</span>
+                    <span>RN环境 Android原生和JS交互</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 来必力City版安装代码 -->
+
+    
+
+<!-- City版安装代码已完成 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="emailto:kahn_2009@live.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/kahnsen" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span>
+        <span
+            id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_pv"></span>
+        </span>
+    </div>
+    
+</footer>
+    </div>
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-category">
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 19 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/20</span><a class="archive-post-title" href= "/kahnblog/2018/07/20/Flutter了解一下？/" >Flutter了解一下？</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span><a class="archive-post-title" href= "/kahnblog/2018/07/06/使用Python创建你自己的CLI工具箱/" >使用Python的Plumbum库创建你自己的CLI工具箱</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/29</span><a class="archive-post-title" href= "/kahnblog/2018/06/29/Python3学习笔记/" >Python3学习笔记</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/03</span><a class="archive-post-title" href= "/kahnblog/2018/05/03/用Android-productFlavors-构建你的多面应用/" >用Android productFlavors 构建你的多面应用 </a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/kahnblog/2017/12/05/Annotation-Processing-Tool/" >Annotation Processing Tool</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/29</span><a class="archive-post-title" href= "/kahnblog/2017/11/29/ASM全解析/" >ASM全解析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/23</span><a class="archive-post-title" href= "/kahnblog/2017/11/23/Git常用命令备忘/" >Git常用命令备忘</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/17</span><a class="archive-post-title" href= "/kahnblog/2017/11/17/搭建Jenkins-Git-Gradle持续集成CI打包平台/" >搭建Jenkins+Git+Gradle持续集成CI打包平台</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/kahnblog/2017/10/30/Java-7-and-Java-8特性你有用过吗？一/" >Java 7 and Java 8特性你有用过吗？二</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/kahnblog/2017/09/27/Java-7-and-Java-8特性你有用过吗？/" >Java 7 and Java 8特性你有用过吗？一</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/19</span><a class="archive-post-title" href= "/kahnblog/2017/09/19/Android原生app加载RN界面原理/" >Android原生app加载RN界面过程</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/15</span><a class="archive-post-title" href= "/kahnblog/2017/09/15/RN环境-Android原生和JS交互/" >RN环境 Android原生和JS交互</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/14</span><a class="archive-post-title" href= "/kahnblog/2017/09/14/Dagger-2-迁移方案和生成代码基本原理/" >Dagger 2 迁移方案和生成代码基本原理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/14</span><a class="archive-post-title" href= "/kahnblog/2017/09/14/EventBus3-0源代码全解析/" >EventBus3.0源代码全解析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/kahnblog/2017/09/12/Android集成RN/" >现有原生Android应用集成RN（React Native Android）开发环境</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/11</span><a class="archive-post-title" href= "/kahnblog/2017/09/11/你还敢说精通Java吗？/" >你还敢说精通Java吗？</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/08</span><a class="archive-post-title" href= "/kahnblog/2017/09/08/开源许可证/" >开源许可证文章整理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/08</span><a class="archive-post-title" href= "/kahnblog/2017/09/08/Markdown-Help/" >Markdown Help</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2014 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/11</span><a class="archive-post-title" href= "/kahnblog/2014/06/11/UML复习备忘录/" >UML复习备忘录</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">Sofeware</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Tools</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Reproduced</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Software</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Java</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Android</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">RN</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Dagger</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">EventBus</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Python3</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Python</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/kahnblog/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+

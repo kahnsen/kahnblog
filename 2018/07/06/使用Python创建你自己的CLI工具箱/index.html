@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        使用Python的Plumbum库创建你自己的CLI工具箱 · Kahn&#39;s blogs
+        
+    </title>
+    <link rel="icon" href= /assests/favicon.ico>
+    <!-- 提前加载place holder  -->
+    <style>
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url('/kahnblog/font/Oswald-Regular.ttf');
+        }
+        @font-face {
+            font-family: 'Source Sans Pro';
+            src: url('/kahnblog/font/Source Sans Pro.woff'),
+            url('/kahnblog/font/Source Sans Pro.woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Source Code Pro';
+            src: url('/kahnblog/font/SourceCodePro-Regular.ttf.woff'),
+            url('/kahnblog/font/SourceCodePro-Regular.ttf.woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        
+        .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0px;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        99% {
+            transform: translate3d(0, 0, 0);
+        }
+        99.1% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(-226px, 0, 0);
+        }
+    }
+    </style>
+    <link rel="stylesheet" href="/kahnblog/css/style.css">
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/kahnblog/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/kahnblog/" >Kahn&#39;s blogs</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">使用Python的Plumbum库创建你自己的CLI工具箱</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/kahnblog/>Kahn's blogs</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+    
+    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            使用Python的Plumbum库创建你自己的CLI工具箱
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+        </p>
+        <!-- 404 -->
+        
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = Python>Python</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2018/07/06</span>
+            </div>
+            <!-- 
+
+<div class="post-share iconfont-archer">
+    <ul class="share-box" data-href = "/kahnblog/2018/07/06/使用Python创建你自己的CLI工具箱/" data-title = "使用Python的Plumbum库创建你自己的CLI工具箱" >
+        <li class="to-weibo">分享到微博</li>
+        <li class="to-wechat">分享到微信</li>
+        <li class="to-qq">分享到QQ</li>
+        <li class="to-twitter">分享到twitter</li>
+    </ul>
+</div> -->
+        
+    </div>
+</div>
+        <div class="container">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>上周学习了Python的基本语法，本着学以致用的想法。就试着用Python写一个自己的命令行工具，把所有常用的命令，工具都放进来，需要用的时候就不用再去google，或者history了。</p>
+<h3 id="为什么学习Python"><a href="#为什么学习Python" class="headerlink" title="为什么学习Python"></a>为什么学习Python</h3><p>既然学习一门语言，就应该有个目标，我学python，不是把它当成主要的开发语言。而是把它当成辅助性脚本语言。需要的时候，可以写一些工具。没事还可以尝试一下网上现在很流行各种python爬虫和AI库。</p>
+<h3 id="命令行工具应该怎么写？是什么样的"><a href="#命令行工具应该怎么写？是什么样的" class="headerlink" title="命令行工具应该怎么写？是什么样的?"></a>命令行工具应该怎么写？是什么样的?</h3><p>想写一个命令行工具，首先想到的是系统自带的shell，可是这个太low了，不考虑。而且我们的主要目的还是为了用python练手。</p>
+<p>最简单的CLI应该是，在命令行中运行一个程序，接收一个参数，在程序中接收这个参数，进行一些运算，并返回。但是这样只能称之为一个可以命令行运行并接收参数的程序。</p>
+<p>而我们常用的系统命令，ls，cd，mkdir都是这样的。而后加装的，比如android的adb。mac os上的brew</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  MyUtils brew --version</div><div class="line">Homebrew 1.6.9</div><div class="line">Homebrew/homebrew-core (git revision 2f937f7; last commit 2018-07-02)</div></pre></td></tr></table></figure>
+<p>我们在使用第三方程序的时候，都知道它们肯定有help，或者version等等命令。其实这些都是在遵守一个规范，同时也方便大家使用。如果想详细了解这个规范请自行google <strong><em>POSIX规范</em></strong></p>
+<h3 id="Plumbum"><a href="#Plumbum" class="headerlink" title="Plumbum"></a>Plumbum</h3><p>plumbum库是一个python库，帮助我们实现命令行程序，在这里我也用到了它。</p>
+<p><a href="http://plumbum.readthedocs.io/en/latest/" target="_blank" rel="external">官网</a>写的很详细，用法也很多，我们这里只重点介绍CLI的部分。</p>
+<p>使用</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install plumbum</div></pre></td></tr></table></figure>
+<p>命令可以安装这个库，如果你使用的是Anaconda，可以使用下面的命令下载</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">conda install -c conda-forge plumbum</div></pre></td></tr></table></figure>
+<h2 id="开始咯"><a href="#开始咯" class="headerlink" title="开始咯"></a>开始咯</h2><h3 id="基本信息设置"><a href="#基本信息设置" class="headerlink" title="基本信息设置"></a>基本信息设置</h3><p>首先我们先新建一个类，继承刚刚提到的Plumbum模块包中的cli.Application</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> plumbum <span class="keyword">import</span> cli, colors</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">DemoApp</span><span class="params">(cli.Application)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">(self, *args)</span>:</span></div><div class="line">        <span class="keyword">pass</span></div><div class="line">        </div><div class="line"><span class="comment"># 可以直接运行</span></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    DemoApp.run()</div></pre></td></tr></table></figure>
+<p>我们去命令行里试先试一下，应该是什么都不会有。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python3 cmddemo.py</div></pre></td></tr></table></figure>
+<p>其实这时候如果输入</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python3 cmddemo.py -h 或者 python3 cmddemo.py --help</div></pre></td></tr></table></figure>
+<p>就会出现以下信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Usage:</div><div class="line">    cmddemo.py [SWITCHES] args...</div><div class="line"></div><div class="line">Meta-switches:</div><div class="line">    -h, --help         Prints this help message and quits</div><div class="line">    --help-all         Print help messages of all subcommands and quit</div><div class="line">    -v, --version      Prints the program's version and quits</div></pre></td></tr></table></figure>
+<p>如果你想调用python3 cmddemo.py就显示这些帮助信息，可以在main中加入一句这样的代码：super().help()就可以了。</p>
+<p>好的，帮助信息已经出来了，我们继续。</p>
+<p>cli.Application类中为我们提供一些字段，可以直接显示信息，直接加上即可</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> plumbum <span class="keyword">import</span> cli, colors</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">DemoApp</span><span class="params">(cli.Application)</span>:</span></div><div class="line"></div><div class="line">    <span class="comment"># 程序名称</span></div><div class="line">    PROGNAME = <span class="string">"kahn的工具包"</span> | colors.green</div><div class="line">    VERSION = <span class="string">"1.0"</span> | colors.blue</div><div class="line">    DESCRIPTION = <span class="string">"kahn的CLI集合"</span></div><div class="line">    USAGE = <span class="string">"demo"</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">(self, *args)</span>:</span></div><div class="line">        super().help()</div><div class="line">        <span class="keyword">pass</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    DemoApp.run()</div></pre></td></tr></table></figure>
+<p>我们再试一下命令，会输出一下信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">kahn的工具包 1.0</div><div class="line"></div><div class="line">kahnCLI集合</div><div class="line"></div><div class="line">Usage:</div><div class="line">demo</div><div class="line">Meta-switches:</div><div class="line">    -h, --help         Prints this help message and quits</div><div class="line">    --help-all         Print help messages of all subcommands and quit</div><div class="line">    -v, --version      Prints the program's version and quits</div></pre></td></tr></table></figure>
+<p>是不是有点感觉了？</p>
+<blockquote>
+<p>代码里有颜色的输出设置，详细配置可见官网。也可以不设置颜色</p>
+</blockquote>
+<h3 id="主参数设置"><a href="#主参数设置" class="headerlink" title="主参数设置"></a>主参数设置</h3><p>现在试着添加一条参数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="string">"""上传下载命令集合"""</span></div><div class="line"><span class="meta">@cli.autoswitch(str)</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">pull</span><span class="params">(self, param)</span>:</span></div><div class="line">    <span class="string">"""从git上拉取源代码"""</span></div><div class="line">    print(<span class="string">"pull "</span> + param)</div></pre></td></tr></table></figure>
+<p>上面的方法增加了一条主参数，我们再试一下命令，应该会显示</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">kahn的工具包 1.0</div><div class="line"></div><div class="line">kahnCLI集合</div><div class="line"></div><div class="line">Usage:</div><div class="line">demo</div><div class="line">Meta-switches:</div><div class="line">    -h, --help            Prints this help message and quits</div><div class="line">    --help-all            Print help messages of all subcommands and quit</div><div class="line">    -v, --version         Prints the program's version and quits</div><div class="line"></div><div class="line">Switches:</div><div class="line">    --pull PARAM:str      从git上拉取源代码</div></pre></td></tr></table></figure>
+<blockquote>
+<p>这时候可以把main里面的help删掉了，不然输入什么都会打出帮助信息。</p>
+</blockquote>
+<p>pull命令可以不带值，把pull的参数，和@cli.autoswitch的参数去掉就可以。–pull的注释可以通过python commen语法编写</p>
+<h3 id="子命令"><a href="#子命令" class="headerlink" title="子命令"></a>子命令</h3><p>我们在使用命令行的时候，一般会使用子命令进行操作。比如 git pull，git branch。像pull就是子命令</p>
+<p>在同一个文件中添加一个类</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@DemoApp.subcommand("sync")</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MeetyouCmdSyncOpt</span><span class="params">(cli.Application)</span>:</span></div><div class="line">    <span class="string">"""上传下载命令集合"""</span></div><div class="line"><span class="meta">    @cli.autoswitch()</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">pull</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="string">"""从git上拉取源代码"""</span></div><div class="line">        <span class="keyword">pass</span></div><div class="line"></div><div class="line"><span class="meta">    @cli.autoswitch(str, argname="模块名")</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">upload</span><span class="params">(self, args)</span>:</span></div><div class="line">        <span class="string">"""上传模块包。例：--upload=calendar"""</span></div><div class="line">        <span class="keyword">pass</span></div></pre></td></tr></table></figure>
+<p>再去输入python3 cmddemo.py -h命令试一下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">kahn的工具包 1.0</div><div class="line"></div><div class="line">kahnCLI集合</div><div class="line"></div><div class="line">Usage:</div><div class="line">demo</div><div class="line">Meta-switches:</div><div class="line">    -h, --help            Prints this help message and quits</div><div class="line">    --help-all            Print help messages of all subcommands and quit</div><div class="line">    -v, --version         Prints the program's version and quits</div><div class="line"></div><div class="line">Switches:</div><div class="line">    --pull PARAM:str      从git上拉取源代码</div><div class="line"></div><div class="line">Subcommands:</div><div class="line">    sync                  上传下载命令集合; see 'kahn的工具包 sync --help' for</div><div class="line">                          more info</div></pre></td></tr></table></figure>
+<p>子命令的帮助信息也出来了。这想看子命令的参数，需要输入python3 cmddemo.py sync -h</p>
+<p>这里我已经设置好了两个子命令，一个pull，一个upload，输入python3 cmddemo.py sync -h看一下效果</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">Usage:</div><div class="line">    kahn的工具包 sync [SWITCHES] args...</div><div class="line"></div><div class="line">Meta-switches:</div><div class="line">    -h, --help            Prints this help message and quits</div><div class="line">    --help-all            Print help messages of all subcommands and quit</div><div class="line">    -v, --version         Prints the program's version and quits</div><div class="line"></div><div class="line">Switches:</div><div class="line">    --pull                从git上拉取源代码</div><div class="line">    --upload 模块名:str      上传模块包。例：--upload=calendar</div></pre></td></tr></table></figure>
+<p>到这里基本设置已经ok了。</p>
+<h3 id="规划"><a href="#规划" class="headerlink" title="规划"></a>规划</h3><p>在我规划的命令行工具的功能暂时先分两种</p>
+<ol>
+<li>直接调用系统的shell命令执行</li>
+<li>需要自己写逻辑的命令</li>
+</ol>
+<p>先说一下1</p>
+<h4 id="调用系统命令"><a href="#调用系统命令" class="headerlink" title="调用系统命令"></a>调用系统命令</h4><p>在python调用系统命令是很简单的，自行google就可以了，下面是代码示例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 执行系统命令</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">executeSystemCmd</span><span class="params">(workDir, cmd)</span>:</span></div><div class="line">    print(<span class="string">"executing...[%s]"</span> % cmd)</div><div class="line">    os.chdir(workDir)</div><div class="line">    result = os.popen(cmd)</div><div class="line">    <span class="keyword">for</span> message <span class="keyword">in</span> result.readlines():</div><div class="line">        print(message)</div></pre></td></tr></table></figure>
+<h4 id="读取配置文件"><a href="#读取配置文件" class="headerlink" title="读取配置文件"></a>读取配置文件</h4><p>我们需要一个配置文件存放写好的命令，这里可以使用Plumbum封装好的conf</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 初始化配置</span></div><div class="line"><span class="keyword">with</span> cli.Config(<span class="string">'./conf/.myapp_rc'</span>) <span class="keyword">as</span> conf:</div><div class="line">    _confSection = conf[<span class="string">'confSection'</span>]</div><div class="line">    _sourceDir = conf[<span class="string">'%s.sourceDir'</span> % _confSection]</div><div class="line">    _mainAppDir = conf[<span class="string">'%s.mainAppDir'</span> % _confSection]</div><div class="line">    _package = conf[<span class="string">'%s.package'</span> % _confSection]</div></pre></td></tr></table></figure>
+<p>使用with cli.Config(‘./conf/.myapp_rc’) as conf:就可以从文件中读取一个标准的python配置文件，默认从[DEFAULT]这个section中读取。简单的说下python配置文件的样式</p>
+<p>一般是这个样子</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[DEFAULT]</div><div class="line">confSection = test1</div><div class="line"></div><div class="line"></div><div class="line">[test1]</div><div class="line">package = com.test.kahn</div><div class="line">sourceDir = /Users/kahn/Dev/test</div><div class="line">mainAppDir = app</div><div class="line"></div><div class="line">[test2]</div><div class="line">package = com.test.kahn2</div><div class="line">sourceDir = None</div><div class="line">mainAppDir = None</div></pre></td></tr></table></figure>
+<p>我们使用conf[test1.package]来读取[test1]中的值，不写test1.默认从DEFAULT中读取</p>
+<p>用一个配置文件存放写好的命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[DEFAULT]</div><div class="line">0 = buck(testDebug);buck install -r appZroTestDebug</div><div class="line">1 = buck(testRealese);buck install -r appZroTestRealese</div><div class="line">2 = buck(productDebug);buck install -r appZroProductDebug</div><div class="line">4 = 切换到最新分支;python xxx.py</div><div class="line">5 = 输出数据库;adb pull /data/data/%%s/databases/ ~/</div><div class="line">6 = 获取当前页面名称;adb shell dumpsys activity | grep &quot;mFocusedActivity&quot;</div><div class="line">7 = 清楚应用缓存;adb shell pm clear xxx</div><div class="line">8 = 卸载xxx;adb uninstall xxx</div></pre></td></tr></table></figure>
+<p>接下来定义一个子命令cmd</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@MeetyouUtils.subcommand("cmd")</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MeetyouCmdPredefine</span><span class="params">(cli.Application)</span>:</span></div><div class="line">    <span class="string">"""预定义命令集"""</span></div><div class="line">    <span class="comment"># 读取命令配置</span></div><div class="line">    <span class="comment"># 命令字典</span></div><div class="line">    cmdDict = &#123;&#125;</div><div class="line">    <span class="comment"># 命令帮助字典</span></div><div class="line">    cmdDictHelp = &#123;&#125;</div><div class="line">    <span class="keyword">with</span> cli.Config(<span class="string">'./conf/.myapp_rc_cmd_conf'</span>) <span class="keyword">as</span> cmdConf:</div><div class="line">        <span class="keyword">for</span> key, option <span class="keyword">in</span> cmdConf.parser.items(<span class="string">"DEFAULT"</span>):</div><div class="line">            optionArr = option.split(<span class="string">";"</span>)</div><div class="line">            cmdDictHelp[key] = optionArr[<span class="number">0</span>]</div><div class="line">            cmdDict[key] = optionArr[<span class="number">1</span>]</div><div class="line">	</div><div class="line"><span class="meta">    @cli.switch(</span></div><div class="line">        [<span class="string">"-h"</span>, <span class="string">"--help"</span>], group = <span class="string">"Meta-switches"</span>,</div><div class="line">        help=<span class="string">"Prints this help message and quits"</span>)</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">help</span><span class="params">(self)</span>:</span></div><div class="line">        super().help()</div><div class="line">        print(<span class="string">"可输入的命令："</span>)</div><div class="line">        <span class="keyword">for</span> k,v <span class="keyword">in</span> self.cmdDictHelp.items():</div><div class="line">            print(<span class="string">"%s : %s"</span> % (k, v))</div><div class="line">        print(<span class="string">"示例：mt cmd 1"</span>)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">(self, *args)</span>:</span></div><div class="line"></div><div class="line">        <span class="keyword">for</span> key, option <span class="keyword">in</span> self.cmdDict.items():</div><div class="line">            <span class="comment"># print(option)</span></div><div class="line">            <span class="keyword">if</span> args.__len__() == <span class="number">1</span> <span class="keyword">and</span> args[<span class="number">0</span>] == key:</div><div class="line">                <span class="comment"># 执行导出数据库操作要区分是哪个app</span></div><div class="line">                optionTemp = option</div><div class="line">                <span class="keyword">if</span> key == <span class="string">"5"</span>:</div><div class="line">                    optionTemp = (option % _package)</div><div class="line">                <span class="keyword">elif</span> key == <span class="string">"13"</span>:</div><div class="line">                    optionTemp = (option % _package)</div><div class="line">                <span class="keyword">else</span>:</div><div class="line">                    optionTemp = option</div><div class="line">                executeSystemCmd(os.path.join(_sourceDir, _mainAppDir), optionTemp)</div></pre></td></tr></table></figure>
+<p>在这个子命令中，我先读取了所有已配置的命令，然后重写了它的help参数方法，把命令配置文件的命令输出到help中</p>
+<p>以便让用户了解到，该命令都可以执行哪些功能。执行python3 cmddemo.py cmd  -h后大致输出是这样的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">预定义命令集</div><div class="line"></div><div class="line">Usage:</div><div class="line">    kahn的工具包 cmd [SWITCHES] args...</div><div class="line"></div><div class="line">Meta-switches:</div><div class="line">                       Prints this help message and quits</div><div class="line">    -h, --help         Prints this help message and quits</div><div class="line">    --help-all         Print help messages of all subcommands and quit</div><div class="line">    -v, --version      Prints the program&apos;s version and quits</div><div class="line"></div><div class="line">可输入的命令：</div><div class="line">0 : buck(testDebug)</div><div class="line">1 : buck(testRealese)</div><div class="line">2 : buck(productDebug)</div><div class="line">3 : buck(productRealse)</div><div class="line">4 : 切换到最新分支</div><div class="line">5 : 输出数据库</div><div class="line">6 : 获取当前页面名称</div><div class="line">7 : 清楚应用缓存</div><div class="line">8 : 卸载孕期</div><div class="line">9 : 批量打aar包</div><div class="line">10 : 小工具模块打包</div><div class="line">11 : 查看tcp接口</div><div class="line">12 : 导出数据库</div><div class="line">13 : monkey压力测试</div></pre></td></tr></table></figure>
+<p>在这个类中，我的main方法接收了一个*args参数，然后判断参数的个数，最后找到相应的命令，调用刚刚写好的executeSystemCmd去执行它。</p>
+<p>做一个示范：调用python cmddemo.py cmd 1</p>
+<p>输出了</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">executing...[buck install -r appZroTestRealese]</div><div class="line">/bin/sh: buck: command not found</div></pre></td></tr></table></figure>
+<p>表示正在执行的命令。因为我系统没有buck命令，所以会输出/bin/sh: buck: command not found</p>
+<p>再来调用一下python cmddemo.py -h看看输出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">kahn的工具包 1.0</div><div class="line"></div><div class="line">kahnCLI集合</div><div class="line"></div><div class="line">Usage:</div><div class="line">demo</div><div class="line">Meta-switches:</div><div class="line">    -h, --help            Prints this help message and quits</div><div class="line">    --help-all            Print help messages of all subcommands and quit</div><div class="line">    -v, --version         Prints the program&apos;s version and quits</div><div class="line"></div><div class="line">Switches:</div><div class="line">    --pull PARAM:str      从git上拉取源代码</div><div class="line"></div><div class="line">Subcommands:</div><div class="line">    cmd                   预定义命令集; see &apos;kahn的工具包 cmd --help&apos; for more</div><div class="line">                          info</div><div class="line">    sync                  上传下载命令集合; see &apos;kahn的工具包 sync --help&apos; for</div><div class="line">                          more info</div></pre></td></tr></table></figure>
+<p>一个CLI的骨架就差不多搭好了。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>上面一个基本的命令行程序弄好了，那么怎么分发出去呢。总不能一直使用python cmddemo.py这种调用方式吧？而且执行的机器有可能没有安装Plumbum模块。</p>
+<p>这里我们用到了setuptools模块。setuptools的使用方法，这里不展开讨论，大概配置是这样的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">from setuptools import setup</div><div class="line"></div><div class="line">setup(</div><div class="line">    name=&apos;myutil&apos;,</div><div class="line">    version=&apos;1.0&apos;,</div><div class="line">    packages=[&apos;xxx&apos;],</div><div class="line">    include_package_data=True,</div><div class="line">    install_requires=[</div><div class="line">        &apos;plumbum&apos;</div><div class="line">    ],</div><div class="line">    entry_points=&apos;&apos;&apos;</div><div class="line">        [console_scripts]</div><div class="line">        myutil = myutil:cli</div><div class="line">    &apos;&apos;&apos;,</div><div class="line">)</div></pre></td></tr></table></figure>
+<p>上面只是一个示例，详细的配置请自行google</p>
+<p>有了setuptools，我们就可以分发出我们的python工具包了。</p>
+<p>使用python setup.py install安装程序后。</p>
+<p>你就可以在任何地方使用这样的命令调用了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">myutil cmd 1</div></pre></td></tr></table></figure>
+<p>就像你的adb一样</p>
+<p>而不用再，非要找到你的源码路径，再去执行下面这样的命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python cmddemo.py</div></pre></td></tr></table></figure>
+<p>通过对setuptools的配置，它还可以帮你安装你所需要的依赖包</p>
+<h2 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h2><p>做为程序员的你，应该有一个自己的工具包</p>
+<p>具体代码后面会更新在github上</p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+            <li class="previous">
+                <a href= "/kahnblog/2018/07/20/Flutter了解一下？/" title= Flutter了解一下？ >
+                    <span>Previous Post</span>
+                    <span>Flutter了解一下？</span>
+                </a>
+            </li>
+        
+        
+            <li class="next">
+                <a href= "/kahnblog/2018/06/29/Python3学习笔记/" title= Python3学习笔记 >
+                    <span>Next Post</span>
+                    <span>Python3学习笔记</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 来必力City版安装代码 -->
+
+    
+
+<!-- City版安装代码已完成 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="emailto:kahn_2009@live.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/kahnsen" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span>
+        <span
+            id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_pv"></span>
+        </span>
+    </div>
+    
+</footer>
+    </div>
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-category">
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 19 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/20</span><a class="archive-post-title" href= "/kahnblog/2018/07/20/Flutter了解一下？/" >Flutter了解一下？</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span><a class="archive-post-title" href= "/kahnblog/2018/07/06/使用Python创建你自己的CLI工具箱/" >使用Python的Plumbum库创建你自己的CLI工具箱</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/29</span><a class="archive-post-title" href= "/kahnblog/2018/06/29/Python3学习笔记/" >Python3学习笔记</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/03</span><a class="archive-post-title" href= "/kahnblog/2018/05/03/用Android-productFlavors-构建你的多面应用/" >用Android productFlavors 构建你的多面应用 </a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/kahnblog/2017/12/05/Annotation-Processing-Tool/" >Annotation Processing Tool</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/29</span><a class="archive-post-title" href= "/kahnblog/2017/11/29/ASM全解析/" >ASM全解析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/23</span><a class="archive-post-title" href= "/kahnblog/2017/11/23/Git常用命令备忘/" >Git常用命令备忘</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/17</span><a class="archive-post-title" href= "/kahnblog/2017/11/17/搭建Jenkins-Git-Gradle持续集成CI打包平台/" >搭建Jenkins+Git+Gradle持续集成CI打包平台</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/kahnblog/2017/10/30/Java-7-and-Java-8特性你有用过吗？一/" >Java 7 and Java 8特性你有用过吗？二</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/kahnblog/2017/09/27/Java-7-and-Java-8特性你有用过吗？/" >Java 7 and Java 8特性你有用过吗？一</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/19</span><a class="archive-post-title" href= "/kahnblog/2017/09/19/Android原生app加载RN界面原理/" >Android原生app加载RN界面过程</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/15</span><a class="archive-post-title" href= "/kahnblog/2017/09/15/RN环境-Android原生和JS交互/" >RN环境 Android原生和JS交互</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/14</span><a class="archive-post-title" href= "/kahnblog/2017/09/14/Dagger-2-迁移方案和生成代码基本原理/" >Dagger 2 迁移方案和生成代码基本原理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/14</span><a class="archive-post-title" href= "/kahnblog/2017/09/14/EventBus3-0源代码全解析/" >EventBus3.0源代码全解析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/kahnblog/2017/09/12/Android集成RN/" >现有原生Android应用集成RN（React Native Android）开发环境</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/11</span><a class="archive-post-title" href= "/kahnblog/2017/09/11/你还敢说精通Java吗？/" >你还敢说精通Java吗？</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/08</span><a class="archive-post-title" href= "/kahnblog/2017/09/08/开源许可证/" >开源许可证文章整理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/08</span><a class="archive-post-title" href= "/kahnblog/2017/09/08/Markdown-Help/" >Markdown Help</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2014 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/11</span><a class="archive-post-title" href= "/kahnblog/2014/06/11/UML复习备忘录/" >UML复习备忘录</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">Sofeware</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Tools</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Reproduced</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Software</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Java</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Android</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">RN</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Dagger</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">EventBus</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Python3</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Python</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/kahnblog/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+

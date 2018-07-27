@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        Flutter了解一下？ · Kahn&#39;s blogs
+        
+    </title>
+    <link rel="icon" href= /assests/favicon.ico>
+    <!-- 提前加载place holder  -->
+    <style>
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url('/kahnblog/font/Oswald-Regular.ttf');
+        }
+        @font-face {
+            font-family: 'Source Sans Pro';
+            src: url('/kahnblog/font/Source Sans Pro.woff'),
+            url('/kahnblog/font/Source Sans Pro.woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Source Code Pro';
+            src: url('/kahnblog/font/SourceCodePro-Regular.ttf.woff'),
+            url('/kahnblog/font/SourceCodePro-Regular.ttf.woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        
+        .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0px;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        99% {
+            transform: translate3d(0, 0, 0);
+        }
+        99.1% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(-226px, 0, 0);
+        }
+    }
+    </style>
+    <link rel="stylesheet" href="/kahnblog/css/style.css">
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/kahnblog/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/kahnblog/" >Kahn&#39;s blogs</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">Flutter了解一下？</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/kahnblog/>Kahn's blogs</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+    
+    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            Flutter了解一下？
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+        </p>
+        <!-- 404 -->
+        
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2018/07/20</span>
+            </div>
+            <!-- 
+
+<div class="post-share iconfont-archer">
+    <ul class="share-box" data-href = "/kahnblog/2018/07/20/Flutter了解一下？/" data-title = "Flutter了解一下？" >
+        <li class="to-weibo">分享到微博</li>
+        <li class="to-wechat">分享到微信</li>
+        <li class="to-qq">分享到QQ</li>
+        <li class="to-twitter">分享到twitter</li>
+    </ul>
+</div> -->
+        
+    </div>
+</div>
+        <div class="container">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>大前端的舞台上你方唱罢我登场。前期做服务端的可能要稍微懂点jsp，html，js，jquery，css，html，甚至还有flash等等，页面的基本布局跟数据填充还是要自己写的。这些都是b/s架构的前端显示。都是基于html的页面技术。移动应用出来后，都是围绕着相应的平台做native view的开发。后来移动应用也有了混合开发，在view显示加入了html5。html5被应用在app上的时候，也被人吹了好几年，后来发现app的webview展示性能始终不尽人意。再后来就是像React Native这样的跨平台应用框架出台，然后就是google自家的flutter。各种技术都有自己的布道者大力鼓吹，感觉出了个什么就要取代什么，大家都要用的样子。其实也不过就是一种需求的解决方案罢了。</p>
+<h2 id="React-Native和Flutter"><a href="#React-Native和Flutter" class="headerlink" title="React Native和Flutter"></a>React Native和Flutter</h2><p>为什么这两个框架总放在一起说：</p>
+<ol>
+<li>都号称有堪比原生的执行效率。（这个我是不信的）</li>
+<li>跨平台，使用和原生开发不同的语言。js和Dart都具有现代语言的优势，弱类型和语法简单。</li>
+<li>开发效率高，都有热重载。（RN还有生产环境的热加载，Flutter暂时没有，这个后面说）</li>
+<li>不使用webview加载</li>
+</ol>
+<blockquote>
+<p>不得不说，这些框架的出现挤占了原生开发者的空间，特别是RN使用的js把页面前端的开发者也引入到了客户端前端开发当中。（不过后来部分公司开始吐槽，原来只需要一个原生开发者，现在需要一个前端开发和一个原生开发。）</p>
+</blockquote>
+<p>你要什么？</p>
+<p>选择一种技术肯定有趋向性，首先明确自己想要是什么。</p>
+<ol>
+<li>热修复</li>
+<li>更快的迭代开发速度</li>
+<li>跨平台</li>
+<li>职责明确，专人负责UI</li>
+<li>活跃的开源社区</li>
+</ol>
+<p>无疑，这两种都能满足你</p>
+<table>
+<thead>
+<tr>
+<th>框架</th>
+<th>使用语言</th>
+<th>开发环境</th>
+<th>编译</th>
+<th>线上热加载</th>
+<th>开发时热重载</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>React Native</td>
+<td>JavaScript</td>
+<td>vs，webstorm …</td>
+<td>JIT</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>Flutter</td>
+<td>Dart</td>
+<td>as,vs …</td>
+<td>JIT,AOT</td>
+<td>不支持</td>
+<td>支持</td>
+</tr>
+</tbody>
+</table>
+<p>很明显，Flutter对android原生开发人员是非常友好的，学习曲线也平滑，简直就是量身打造（毕竟是google出品）</p>
+<p>一个新的app其实不用这么纠结。评估一下项目，很容易选择适合自己的框架。</p>
+<p>对一个现有的项目，加入新的框架就有很多考量了。</p>
+<ol>
+<li>是否增加包体积</li>
+<li>是否增加app运存</li>
+<li>是否增加cpu使用率</li>
+<li>是否稳定（是否增加闪退率）</li>
+<li>框架是否频繁更新</li>
+<li>框架是否有良好的文档</li>
+<li>现有开发人员的学习曲线是否陡峭（土豪公司不用考虑）</li>
+</ol>
+<p>对上面的几条，需要大量的数据才能得出结果，目前能确定的是。</p>
+<ol>
+<li>是(flutter一个什么功能都没有的新包，是29MB)</li>
+<li>是</li>
+<li>不一定</li>
+<li>是</li>
+<li>是</li>
+<li>flutter是</li>
+<li>rn对页面前端开发友好，flutter对android开发人员更友好（不过dart的语法和js更像）</li>
+</ol>
+<h2 id="Flutter"><a href="#Flutter" class="headerlink" title="Flutter"></a>Flutter</h2><h3 id="官网"><a href="#官网" class="headerlink" title="官网"></a>官网</h3><p>学习一门新的技术，最快的方式就是先从官网入手。（中文的第三方社区总会有那么一点偏差）</p>
+<p><a href="https://flutter.io/" target="_blank" rel="external">Flutter官网</a></p>
+<p>说实话，看完flutter官网，第一直觉就是，reactnative就是个渣渣（原谅我这么直接）。能看的出google官方推Flutter的力度。</p>
+<p>绝对是良心官网，做到了一站式学习，感觉看完官网就可以飞了，什么第三方教程都可以走开。（澄清一下哈，本文不是教程，只是简介，把从官网看到的根据自己的思路总结一下）</p>
+<h3 id="Dart"><a href="#Dart" class="headerlink" title="Dart"></a>Dart</h3><p>说到新框架，新语言，简直心累，各种语言从入门到放弃。没办法，想用这个技术框架，就得跟着框架走。</p>
+<p>既然不得不学习Dart，我们就要清楚</p>
+<p>为什么要用Dart。为什么是它？</p>
+<p>这边给上一篇译文，写的非常全面。<a href="http://www.infoq.com/cn/articles/why-flutter-uses-dart" target="_blank" rel="external">为什么Flutter会选择 Dart ？</a></p>
+<p>英文好的朋友可以去看原文(真让人羡慕) <a href="https://hackernoon.com/why-flutter-uses-dart-dd635a054ebf" target="_blank" rel="external">Why Flutter Uses Dart</a></p>
+<p>上面的文章说的很有蛊惑性。我看到最有价值还是JIT和AOT，既有即时编译，也有预编译，还有自己的虚拟机，速度一定高于基于js的reactnative，这个没话说，点个赞。</p>
+<p>google还很贴心的给出了一个java开发者学习dart语言的一个快速小教程，你可以先去体验一下dart，非常快。<a href="https://codelabs.developers.google.com/codelabs/from-java-to-dart/#0" target="_blank" rel="external">从java到dart</a></p>
+<h3 id="开发Flutter"><a href="#开发Flutter" class="headerlink" title="开发Flutter"></a>开发Flutter</h3><h4 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h4><p>先是安装，这个跟着官网的<strong><em>Get started</em></strong>一步一步做就可以了。<strong><em>Get started</em></strong>会引导你搭建环境，开发第一个flutter，然后编写了第一个flutter程序后，你就会对flutter有个比较直观的印象。大概是下面的样子。（盗官方的图!）</p>
+<p><img src="startup-namer-app.gif" alt="startup-namer-app.gif"></p>
+<h4 id="UI"><a href="#UI" class="headerlink" title="UI"></a>UI</h4><p>它是和rn非常相似的响应式UI框架，说白了就是修改一个类似RN里面的状态机的东西，然后自动刷新UI。StatelessWidget就是Flutter里面无状态的组件，StatefulWidget是有状态的组件。</p>
+<p>Flutter里面所有的一切都是组件。而且随你怎么玩弄。Flutter组件结构，采用组合大于继承的方式，类结构浅而宽，再使用Flutter的时候，首先想到的应该使用多个小部件组成一个新的部件，而不是继承一个现有的部件。它会给你更高的权限来修改。如果像android原生的View，采用继承结构，父类里面已经定义好的属性或者样式，你在子类里面就无权修改了。</p>
+<p>搬用工 <a href="https://flutter.io/widgets/" target="_blank" rel="external">组件</a> ，里面有所有组件的介绍。</p>
+<p>我觉得在基本语法，和用法都掌握的情况下，就剩下用到哪个组件，然后去官网查了。</p>
+<h4 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h4><p>如果是android开发者，首页可能要看下这篇文章（也是官网的）<a href="https://flutter.io/flutter-for-android/" target="_blank" rel="external">Flutter for Android Developers</a></p>
+<p>里面会全面的告诉你，Android原生的View，intent，layout，异步UI，资源加载等等，在Flutter里面都对应的是什么东西，怎么调用，一目了然。</p>
+<h4 id="你关心的热加载"><a href="#你关心的热加载" class="headerlink" title="你关心的热加载"></a>你关心的热加载</h4><p>大部分公司看上ReactNative我估计是都是看上了它的热加载技术（最起码我的公司是）。很遗憾，Flutter官网也明确说了，不支持！那么我就有疑问了，明明支持JIT，并且开发时可以热重载，为什么就不能热加载呢。（注意，开发时的加载官方叫做Using Hot Reload，热重载，和我们想象中的rn那样的热加载不是一回事）。悄悄的google了一下，果然有人问到这个问题，Flutter的项目经理也出来现身说法了，它肯定也不愿意开发者因为flutter没有热加载，而投身rn阵营。</p>
+<p>下面是这位大佬的回答</p>
+<p><img src="dalaosay1.png" alt="dalaosay1.png"></p>
+<p>大致意思就是我们能搞，而且本来也是支持的（毕竟是JIT编译），这里IOS背了锅，因为IOS，我们删除了支持该功能的库，加上也非常容易。如果你实在想搞热加载，把一些希望热加载东西自己去写js吧</p>
+<p>大哥，你这个回答我可是很不服气，你让我用flutter，还得再去把部分代码抽成js。</p>
+<p>github上群众的呼声依然很高，Eric Seidel 老大终于服软</p>
+<p><img src="dalaosay2.png" alt="dalaosay2.png"></p>
+<p>使用万能的google翻译后</p>
+<blockquote>
+<p>我们在这里构建了一些基本的原型，但目前还没有真正分享的东西。要做到这一点，需要在Dart的编译器工具链中进行一些工作。我希望它能在很长一段时间才能在这里分享。该团队目前专注于稳定1.0。总而言之，我们听到了你。:)这显然是许多人重视的功能，我们最终有兴趣提供这样的功能。</p>
+</blockquote>
+<p>呵呵，All that said, we hear you.大佬也认怂了，总结一句话，先稳定1.0，后期我会搞！</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><strong><em>从各方面感觉，Flutter非常的有搞头。而且就在前几天，谷歌被欧盟罚了50亿，新闻上一片呼声说谷歌要用Fuchsia替换android。后来谷歌澄清说，没有这种事，Fuchsia只是我们内部的一个实验。但是！！你会发现：Fuchsia的用户界面和应用是用Flutter写的。重要的事情说三遍：Fuchsia的用户界面和应用是用Flutter写的。Fuchsia的用户界面和应用是用Flutter写的。Fuchsia的用户界面和应用是用Flutter写的。</em></strong></p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+        
+            <li class="next">
+                <a href= "/kahnblog/2018/07/06/使用Python创建你自己的CLI工具箱/" title= 使用Python的Plumbum库创建你自己的CLI工具箱 >
+                    <span>Next Post</span>
+                    <span>使用Python的Plumbum库创建你自己的CLI工具箱</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 来必力City版安装代码 -->
+
+    
+
+<!-- City版安装代码已完成 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="emailto:kahn_2009@live.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/kahnsen" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span>
+        <span
+            id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_pv"></span>
+        </span>
+    </div>
+    
+</footer>
+    </div>
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-category">
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 19 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/20</span><a class="archive-post-title" href= "/kahnblog/2018/07/20/Flutter了解一下？/" >Flutter了解一下？</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span><a class="archive-post-title" href= "/kahnblog/2018/07/06/使用Python创建你自己的CLI工具箱/" >使用Python的Plumbum库创建你自己的CLI工具箱</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/29</span><a class="archive-post-title" href= "/kahnblog/2018/06/29/Python3学习笔记/" >Python3学习笔记</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/03</span><a class="archive-post-title" href= "/kahnblog/2018/05/03/用Android-productFlavors-构建你的多面应用/" >用Android productFlavors 构建你的多面应用 </a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/kahnblog/2017/12/05/Annotation-Processing-Tool/" >Annotation Processing Tool</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/29</span><a class="archive-post-title" href= "/kahnblog/2017/11/29/ASM全解析/" >ASM全解析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/23</span><a class="archive-post-title" href= "/kahnblog/2017/11/23/Git常用命令备忘/" >Git常用命令备忘</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/17</span><a class="archive-post-title" href= "/kahnblog/2017/11/17/搭建Jenkins-Git-Gradle持续集成CI打包平台/" >搭建Jenkins+Git+Gradle持续集成CI打包平台</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/kahnblog/2017/10/30/Java-7-and-Java-8特性你有用过吗？一/" >Java 7 and Java 8特性你有用过吗？二</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/kahnblog/2017/09/27/Java-7-and-Java-8特性你有用过吗？/" >Java 7 and Java 8特性你有用过吗？一</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/19</span><a class="archive-post-title" href= "/kahnblog/2017/09/19/Android原生app加载RN界面原理/" >Android原生app加载RN界面过程</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/15</span><a class="archive-post-title" href= "/kahnblog/2017/09/15/RN环境-Android原生和JS交互/" >RN环境 Android原生和JS交互</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/14</span><a class="archive-post-title" href= "/kahnblog/2017/09/14/Dagger-2-迁移方案和生成代码基本原理/" >Dagger 2 迁移方案和生成代码基本原理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/14</span><a class="archive-post-title" href= "/kahnblog/2017/09/14/EventBus3-0源代码全解析/" >EventBus3.0源代码全解析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/kahnblog/2017/09/12/Android集成RN/" >现有原生Android应用集成RN（React Native Android）开发环境</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/11</span><a class="archive-post-title" href= "/kahnblog/2017/09/11/你还敢说精通Java吗？/" >你还敢说精通Java吗？</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/08</span><a class="archive-post-title" href= "/kahnblog/2017/09/08/开源许可证/" >开源许可证文章整理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/08</span><a class="archive-post-title" href= "/kahnblog/2017/09/08/Markdown-Help/" >Markdown Help</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2014 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/11</span><a class="archive-post-title" href= "/kahnblog/2014/06/11/UML复习备忘录/" >UML复习备忘录</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">Sofeware</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Tools</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Reproduced</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Software</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Java</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Android</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">RN</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Dagger</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">EventBus</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Python3</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Python</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/kahnblog/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+

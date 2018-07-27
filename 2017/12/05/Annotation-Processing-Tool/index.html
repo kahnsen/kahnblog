@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        Annotation Processing Tool · Kahn&#39;s blogs
+        
+    </title>
+    <link rel="icon" href= /assests/favicon.ico>
+    <!-- 提前加载place holder  -->
+    <style>
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url('/kahnblog/font/Oswald-Regular.ttf');
+        }
+        @font-face {
+            font-family: 'Source Sans Pro';
+            src: url('/kahnblog/font/Source Sans Pro.woff'),
+            url('/kahnblog/font/Source Sans Pro.woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Source Code Pro';
+            src: url('/kahnblog/font/SourceCodePro-Regular.ttf.woff'),
+            url('/kahnblog/font/SourceCodePro-Regular.ttf.woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        
+        .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0px;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        99% {
+            transform: translate3d(0, 0, 0);
+        }
+        99.1% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(-226px, 0, 0);
+        }
+    }
+    </style>
+    <link rel="stylesheet" href="/kahnblog/css/style.css">
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/kahnblog/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/kahnblog/" >Kahn&#39;s blogs</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">Annotation Processing Tool</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/kahnblog/>Kahn's blogs</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+    
+    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            Annotation Processing Tool
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+        </p>
+        <!-- 404 -->
+        
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/12/05</span>
+            </div>
+            <!-- 
+
+<div class="post-share iconfont-archer">
+    <ul class="share-box" data-href = "/kahnblog/2017/12/05/Annotation-Processing-Tool/" data-title = "Annotation Processing Tool" >
+        <li class="to-weibo">分享到微博</li>
+        <li class="to-wechat">分享到微信</li>
+        <li class="to-qq">分享到QQ</li>
+        <li class="to-twitter">分享到twitter</li>
+    </ul>
+</div> -->
+        
+    </div>
+</div>
+        <div class="container">
+            <main class="main post-page">
+    <article class="article-entry">
+        <p>上一篇说了ASM，直接修改字节码，说实话，直接修改字节码真的不好（各种版本问题，Android的兼容也不是很好，最近android新出的jack工具链编译系统也不知道支持不支持）。在文章的后面也说了，能用代码（设计模式）解决的问题“尽量”用代码解决。那么，我们使用设计模式的时候，难免会出现大量的套路代码，怎么破？APT来了。这玩意是在编译前会扫描所有注解，给你一个生成java源代码，源代码就不会出现这些问题了，跟你手写的一样！来吧，让我们看看apt是啥。</p>
+<blockquote>
+<p>本篇主要不是讲基础的APT，主要说google auto工具库，javapoet。</p>
+<p>惯例 轮子<br><a href="http://gityuan.com/2016/01/23/java-annotation/" target="_blank" rel="external">Java注解(Annotation)</a><br><a href="https://www.race604.com/annotation-processing/" target="_blank" rel="external">Java注解处理器</a></p>
+</blockquote>
+<h2 id="APT"><a href="#APT" class="headerlink" title="APT"></a>APT</h2><p>Annotation Processing Tool其实就是一个javac提供的注解处理器，他会扫描所有源代码中的注解。那么是怎么触发的呢？</p>
+<p>首先，你想让javac扫描你的注解，就必须提供一个注解处理器，在代码中的体现就是继承javax.annotation.processing.AbstractProcessor类，实现里面的process抽象方法。javac就会在编译前，把所有的注解通过参数都给你，当然你也可以用getSupportedAnnotationTypes过滤出你想要的。然后再提供一个META-INF文件，给javac说明一下你的哪个类是注解处理器就可以了。因为这个处理是在编译前，你不用文件说明一下javac也不知道呀。</p>
+<p>看看，APT是不是很简单？就是给javac提供一个AbstractProcessor实现，它会给你想要的。AbstractProcessor实现了Processor接口，看看Processor接口。</p>
+<blockquote>
+<p>init(ProcessingEnvironment env): 每一个注解处理器类都必须有一个空的构造函数。然而，这里有一个特殊的init()方法，它会被注解处理工具调用，并输入ProcessingEnviroment参数。ProcessingEnviroment提供很多有用的工具类Elements, Types和Filer。后面我们将看到详细的内容。<br>process(Set&lt;? extends TypeElement&gt; annotations, RoundEnvironment env): 这相当于每个处理器的主函数main()。你在这里写你的扫描、评估和处理注解的代码，以及生成Java文件。输入参数RoundEnviroment，可以让你查询出包含特定注解的被注解元素。后面我们将看到详细的内容。<br>getSupportedAnnotationTypes(): 这里你必须指定，这个注解处理器是注册给哪个注解的。注意，它的返回值是一个字符串的集合，包含本处理器想要处理的注解类型的合法全称。换句话说，你在这里定义你的注解处理器注册到哪些注解上。<br>getSupportedSourceVersion(): 用来指定你使用的Java版本。通常这里返回SourceVersion.latestSupported()。然而，如果你有足够的理由只支持Java 6的话，你也可以返回SourceVersion.RELEASE_6。我推荐你使用前者。<br>上面的解释来自开篇推荐的博客</p>
+</blockquote>
+<p>在init方法中，参数ProcessingEnviroment可以获取一些辅助对象，可以把这些对象缓存下来，以便在process中使用。</p>
+<p>主要关注的就是process方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@AutoService</span>(Processor.class)</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FactoryProcessor</span> <span class="keyword">extends</span> <span class="title">AbstractProcessor</span> </span>&#123;</div><div class="line"></div><div class="line">  <span class="keyword">private</span> Types typeUtils;</div><div class="line">  <span class="keyword">private</span> Elements elementUtils;</div><div class="line">  <span class="keyword">private</span> Filer filer;</div><div class="line">  <span class="keyword">private</span> Messager messager;</div><div class="line">  <span class="keyword">private</span> Map&lt;String, FactoryGroupedClasses&gt; factoryClasses = <span class="keyword">new</span> LinkedHashMap&lt;String, FactoryGroupedClasses&gt;();</div><div class="line">    ...</div><div class="line"></div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">process</span><span class="params">(Set&lt;? extends TypeElement&gt; annotations, RoundEnvironment roundEnv)</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">// 遍历所有被注解了@Factory的元素</span></div><div class="line">    <span class="keyword">for</span> (Element annotatedElement : roundEnv.getElementsAnnotatedWith(Factory.class)) &#123;</div><div class="line">          ...</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"> ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>借用一下开篇博客的例子，一般的处理方式就是在process里面过滤出你想处理的注解。得到的是一个Element。关于Element的概念，大家可以仔细研读开篇的推荐博客。（<em>不得不说，开篇的博客写的真的很好，把AbstractProcessor的细节都讲的很清楚</em>）。</p>
+<p>后面就是使用Filer来生成java源文件。APT的基础应用大概就是这样子，你可以生成套路代码（Butter Knife），或者按照约定生成一些相互对应的类，来实现模块之间的解耦。或者是像dagger那样，生成一套注入框架。</p>
+<h2 id="Auto"><a href="#Auto" class="headerlink" title="Auto"></a>Auto</h2><p><a href="https://github.com/google/auto" target="_blank" rel="external">Google Auto</a>是一套Apt的工具类，可以使你的apt开发过程更清爽，爽。</p>
+<h4 id="AutoService"><a href="#AutoService" class="headerlink" title="AutoService"></a>AutoService</h4><p>上面的开篇博客讲了auto其中一个套件的功能，就是@AutoService(Processor.class)注解。在一个AbstractProcessor实现类上写上这样的注解，你就可以不用配置META-INF文件夹的内容了，auto会帮你自动实现</p>
+<h4 id="Common"><a href="#Common" class="headerlink" title="Common"></a>Common</h4><p>common里面给我们提供了可以模块化开发apt的一些扩展实现。其中有个BasicAnnotationProcessor类。原本你要继承AbstractProcessor，现在只要继承BasicAnnotationProcessor就可以了。它有一个抽象方法，你需要实现一下。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@AutoService</span>(Processor.class)</div><div class="line"><span class="meta">@SupportedSourceVersion</span>(SourceVersion.RELEASE_7)</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestAptProcessor</span> <span class="keyword">extends</span> <span class="title">BasicAnnotationProcessor</span> </span>&#123;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="keyword">protected</span> Iterable&lt;? extends ProcessingStep&gt; initSteps() &#123;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> ImmutableList.of(<span class="keyword">new</span> TestProcessingStep(), <span class="keyword">new</span> Test2ProcessingStep());</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>返回值是一个类型为ProcessingStep的集合。那么ProcessingStep又是什么呢？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * The unit of processing logic that runs under the guarantee that all elements are complete and</div><div class="line"> * well-formed. A step may reject elements that are not ready for processing but may be at a later</div><div class="line"> * round.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ProcessingStep</span> </span>&#123;</div><div class="line">  <span class="comment">/** The set of annotation types processed by this step. */</span></div><div class="line">  Set&lt;? extends Class&lt;? extends Annotation&gt;&gt; annotations();</div><div class="line"></div><div class="line">  <span class="comment">/**</span></div><div class="line">   * The implementation of processing logic for the step. It is guaranteed that the keys in</div><div class="line">   * &#123;<span class="doctag">@code</span> elementsByAnnotation&#125; will be a subset of the set returned by &#123;<span class="doctag">@link</span> #annotations()&#125;.</div><div class="line">   *</div><div class="line">   * <span class="doctag">@return</span> the elements that this step is unable to process, possibly until a later processing</div><div class="line">   *     round. These elements will be passed back to this step at the next round of processing.</div><div class="line">   */</div><div class="line">  <span class="function">Set&lt;Element&gt; <span class="title">process</span><span class="params">(SetMultimap&lt;Class&lt;? extends Annotation&gt;, Element&gt; elementsByAnnotation)</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>ok，它里面有两个方法，一个annotations，返回了一个注解set。你可以返回一些注解。一个是process，它的参数是一个map，key是一个注解，value是一个Element。看一个例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Created by kahn on 2017/12/6.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestProcessingStep</span> <span class="keyword">implements</span> <span class="title">BasicAnnotationProcessor</span>.<span class="title">ProcessingStep</span> </span>&#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="keyword">public</span> Set&lt;? extends Class&lt;? extends Annotation&gt;&gt; annotations() &#123;</div><div class="line">        <span class="keyword">return</span> ImmutableSet.of(Test.class);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Set&lt;Element&gt; <span class="title">process</span><span class="params">(SetMultimap&lt;Class&lt;? extends Annotation&gt;, Element&gt; elementsByAnnotation)</span> </span>&#123;</div><div class="line"></div><div class="line">        System.out.println(<span class="string">"------TestProcessingStep process-------"</span>);</div><div class="line">        System.out.println(elementsByAnnotation);</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">        ImmutableSet.Builder&lt;Element&gt; rejectedElements = ImmutableSet.builder();</div><div class="line"></div><div class="line">        <span class="keyword">return</span> rejectedElements.build();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>编译后，它的输出为</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">------TestProcessingStep process-------</div><div class="line">&#123;<span class="class"><span class="keyword">interface</span> <span class="title">com</span>.<span class="title">kahn</span>.<span class="title">aptannotation</span>.<span class="title">Test</span></span>=[com.kahn.testapt.MainActivity]&#125;</div></pre></td></tr></table></figure>
+<p>我还有一个Test2ProcessingStep，它的输出为</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">------Test2ProcessingStep process-------</div><div class="line">&#123;<span class="class"><span class="keyword">interface</span> <span class="title">com</span>.<span class="title">kahn</span>.<span class="title">aptannotation</span>.<span class="title">Test2</span></span>=[com.kahn.testapt.MainActivity2]&#125;</div></pre></td></tr></table></figure>
+<p>这下应该一目了然了吧。</p>
+<p>ProcessingStep可以把你需要处理的注解独立出来单独处理，每个ProcessingStep只需要关注自己想关注的注解。这不是很好的解耦吗？如果按照以前的写法，处理所有注解都挤在一个process里面。</p>
+<p>ProcessingStep的process方法的返回值也需要重点说一下。它的返回值是需要进入下一轮循环的Element集合。例如：我们在本轮生成了一些带有注解的源代码，我们得保证这些源代码跟我们之前的源代码一样也经过apt的扫描。<strong><em>也可以返回一些目前无法处理的元素，例如：你要处理一个类，但是处理这个类需要先处理别的类。那么你就要把这个类放入下一轮进行处理</em></strong></p>
+<p>因为我们的元注解Target只能指定到Type级别的，那么接口interface是一个type，类也是一个class。那么这里已经分开的Element还是有各种各样的Type，你依然需要使用element.getKind().equals(INTERFACE)这样的代码来过滤出你想要的东西。你可能还想过滤出这个类的访问权限，像这样getModifiers().contains(ABSTRACT)。</p>
+<p>当过滤出你真正想要的东西后，就可以从这个TypeElement上获取到注解信息，element.getAnnotation(注解)。然后就是从注解中取值，构建你的源代码。这里有个需要注意的地方，如果你的注解上有个字段是个Class类型的。像这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">@Target</span>(ElementType.TYPE)</div><div class="line"><span class="meta">@Retention</span>(RetentionPolicy.CLASS)</div><div class="line"><span class="meta">@Documented</span></div><div class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Test &#123;</div><div class="line"></div><div class="line">    Class&lt;?&gt; getType();</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>那么就要小心了，从这个注解上取到的Class对象，有可能还没被编译！这种情况下，直接获取Class会抛出MirroredTypeException异常。幸运的是，MirroredTypeException包含一个TypeMirror，它表示我们未编译类。因为我们已经知道它必定是一个类类型（我们已经在前面检查过），我们可以直接强制转换为DeclaredType，然后读取TypeElement来获取合法的名字。下面该轮到写源代码了。</p>
+<h2 id="Javapoet"><a href="#Javapoet" class="headerlink" title="Javapoet"></a>Javapoet</h2><p><a href="https://github.com/square/javapoet" target="_blank" rel="external">Github square/javapoet</a><br><a href="http://www.jianshu.com/p/95f12f72f69a" target="_blank" rel="external">javapoet——让你从重复无聊的代码中解放出来</a>  </p>
+<p>第一个链接是javapoet的github地址。第二个是一篇博文。这篇博文基本把GitHub上的readme.mk翻译了一遍。</p>
+<p>用Javapoet就可以轻松写源码了</p>
+<p>先说说apt自带的写源码工具。上面有说过一个filter，可以在init中拿到。下面是示例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">JavaFileObject fileObject = filer.createSourceFile(<span class="string">"类名"</span>, (Element[]) <span class="keyword">null</span>);</div><div class="line">Writer writer = fileObject.openWriter();</div><div class="line">writer.write(“类的代码”, value));</div><div class="line">writer.flush();</div><div class="line">writer.close();</div></pre></td></tr></table></figure>
+<p>就是这样。</p>
+<p>Javapoet就不详细说了，官方的文档还是很全的，总之就是用它的api拼出一个java源代码。当然了，你也可以自己拼代码，就像上面用java原生jdk生成的那样。自己拼代码对一些语法检测无法掌控。</p>
+<p>上一个官方的例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.example.helloworld;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">    System.out.println(<span class="string">"Hello, JavaPoet!"</span>);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>生成这个类的javapoet代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">writeJava</span><span class="params">()</span> </span>&#123;</div><div class="line">    MethodSpec main = MethodSpec.methodBuilder(<span class="string">"main"</span>)</div><div class="line">            .addModifiers(Modifier.PUBLIC, Modifier.STATIC)</div><div class="line">            .returns(<span class="keyword">void</span>.class)</div><div class="line">            .addParameter(String[].class, <span class="string">"args"</span>)</div><div class="line">            .addStatement(<span class="string">"$T.out.println($S)"</span>, System.class, <span class="string">"Hello, JavaPoet!"</span>)</div><div class="line">            .build();</div><div class="line"></div><div class="line">    TypeSpec helloWorld = TypeSpec.classBuilder(<span class="string">"HelloWorld"</span>)</div><div class="line">            .addModifiers(Modifier.PUBLIC, Modifier.FINAL)</div><div class="line">            .addMethod(main)</div><div class="line">            .build();</div><div class="line"></div><div class="line">    JavaFile javaFile = JavaFile.builder(<span class="string">"com.example.helloworld"</span>, helloWorld)</div><div class="line">            .build();</div><div class="line"></div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        javaFile.writeTo(filer);</div><div class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">        e.printStackTrace();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>javaFile.writeTo(filer)，为最终输出。javaFile.writeTo有很多重载方法。这里直接把apt给我们的filer传进去，直接就在目标目录生成一个java文件，就可以用了！</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>java的apt大概就是这么多内容，当然还有很多细节，比如Element这边没有详细说，因为推荐博客里面已经说的很详细了。原理很简单，但是想设计出优秀的框架还是不容易。如果在写代码的时候，多用设计模式，解耦抽象，你会发现很多代码都是套路代码，可以自动生成的。那么就用apt吧。</p>
+<p>首先要清楚的了解，这套机制是基于注解的，所以注解的知识点要牢牢掌握。其次，注解的基本知识只是让你会用。如果想用好，还要去了解Java的注解规范，使用一些JSR规范中提供的注解。例如：依赖注入的JSR 330。</p>
+<p>我哔哔完了</p>
+<blockquote>
+<p><a href="https://github.com/kahnsen/TestApt" target="_blank" rel="external">本篇博文例子源代码</a></p>
+</blockquote>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+            <li class="previous">
+                <a href= "/kahnblog/2018/05/03/用Android-productFlavors-构建你的多面应用/" title= 用Android productFlavors 构建你的多面应用  >
+                    <span>Previous Post</span>
+                    <span>用Android productFlavors 构建你的多面应用 </span>
+                </a>
+            </li>
+        
+        
+            <li class="next">
+                <a href= "/kahnblog/2017/11/29/ASM全解析/" title= ASM全解析 >
+                    <span>Next Post</span>
+                    <span>ASM全解析</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 来必力City版安装代码 -->
+
+    
+
+<!-- City版安装代码已完成 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="emailto:kahn_2009@live.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/kahnsen" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span>
+        <span
+            id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_pv"></span>
+        </span>
+    </div>
+    
+</footer>
+    </div>
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-category">
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 19 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/20</span><a class="archive-post-title" href= "/kahnblog/2018/07/20/Flutter了解一下？/" >Flutter了解一下？</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span><a class="archive-post-title" href= "/kahnblog/2018/07/06/使用Python创建你自己的CLI工具箱/" >使用Python的Plumbum库创建你自己的CLI工具箱</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/29</span><a class="archive-post-title" href= "/kahnblog/2018/06/29/Python3学习笔记/" >Python3学习笔记</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/03</span><a class="archive-post-title" href= "/kahnblog/2018/05/03/用Android-productFlavors-构建你的多面应用/" >用Android productFlavors 构建你的多面应用 </a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/kahnblog/2017/12/05/Annotation-Processing-Tool/" >Annotation Processing Tool</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/29</span><a class="archive-post-title" href= "/kahnblog/2017/11/29/ASM全解析/" >ASM全解析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/23</span><a class="archive-post-title" href= "/kahnblog/2017/11/23/Git常用命令备忘/" >Git常用命令备忘</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/17</span><a class="archive-post-title" href= "/kahnblog/2017/11/17/搭建Jenkins-Git-Gradle持续集成CI打包平台/" >搭建Jenkins+Git+Gradle持续集成CI打包平台</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/kahnblog/2017/10/30/Java-7-and-Java-8特性你有用过吗？一/" >Java 7 and Java 8特性你有用过吗？二</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/kahnblog/2017/09/27/Java-7-and-Java-8特性你有用过吗？/" >Java 7 and Java 8特性你有用过吗？一</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/19</span><a class="archive-post-title" href= "/kahnblog/2017/09/19/Android原生app加载RN界面原理/" >Android原生app加载RN界面过程</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/15</span><a class="archive-post-title" href= "/kahnblog/2017/09/15/RN环境-Android原生和JS交互/" >RN环境 Android原生和JS交互</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/14</span><a class="archive-post-title" href= "/kahnblog/2017/09/14/Dagger-2-迁移方案和生成代码基本原理/" >Dagger 2 迁移方案和生成代码基本原理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/14</span><a class="archive-post-title" href= "/kahnblog/2017/09/14/EventBus3-0源代码全解析/" >EventBus3.0源代码全解析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/kahnblog/2017/09/12/Android集成RN/" >现有原生Android应用集成RN（React Native Android）开发环境</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/11</span><a class="archive-post-title" href= "/kahnblog/2017/09/11/你还敢说精通Java吗？/" >你还敢说精通Java吗？</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/08</span><a class="archive-post-title" href= "/kahnblog/2017/09/08/开源许可证/" >开源许可证文章整理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/08</span><a class="archive-post-title" href= "/kahnblog/2017/09/08/Markdown-Help/" >Markdown Help</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2014 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/11</span><a class="archive-post-title" href= "/kahnblog/2014/06/11/UML复习备忘录/" >UML复习备忘录</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">Sofeware</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Tools</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Reproduced</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Software</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Java</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Android</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">RN</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Dagger</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">EventBus</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Python3</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Python</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/kahnblog/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+
