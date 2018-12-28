@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
     <title>
         
-        Kahn&#39;s blogs
+        Dart依赖和搭建Flutter or Dart简易私人仓库 · Kahn&#39;s blogs
         
     </title>
     <link rel="icon" href= /assests/favicon.ico>
@@ -68,13 +68,22 @@
     
 </head>
     
-        <body class="four-zero-four-body">
+        <body class="post-body">
     
     
 <header class="header">
 
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/kahnblog/" >Kahn&#39;s blogs</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">Dart依赖和搭建Flutter or Dart简易私人仓库</a>
+            </div>
+    </div>
     
     <a class="home-link" href=/kahnblog/>Kahn's blogs</a>
 </header>
@@ -84,158 +93,139 @@
     <!-- 主页  -->
     
     
+    <!-- 404页  -->
     
-    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/404.jpg)"></div>
+    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
     <div class="site-intro-placeholder"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            [404]
+            Dart依赖和搭建Flutter or Dart简易私人仓库
+            <!-- 404 -->
             
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
-            <p class="intro-subtitle"> </p>
+            
+        </p>
+        <!-- 404 -->
         
         <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = Dart>Dart</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = Flutter>Flutter</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2018/12/28</span>
+            </div>
+            <!-- 
+
+<div class="post-share iconfont-archer">
+    <ul class="share-box" data-href = "/kahnblog/2018/12/28/Dart依赖和搭建Flutter-or-Dart简易私人仓库/" data-title = "Dart依赖和搭建Flutter or Dart简易私人仓库" >
+        <li class="to-weibo">分享到微博</li>
+        <li class="to-wechat">分享到微信</li>
+        <li class="to-qq">分享到QQ</li>
+        <li class="to-twitter">分享到twitter</li>
+    </ul>
+</div> -->
         
     </div>
 </div>
         <div class="container">
-            <main class="main index-page">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>目前基于Dart语言的包仓库是官方搭建的<a href="https://pub.dartlang.org/" target="_blank" rel="external">https://pub.dartlang.org/</a>，默认都是开源的。公司明显是不可能打成开源包上传官方网站的。官方也提供了解决方案。不但官方中心库服务器的<a href="https://github.com/dart-lang/pub-dartlang-dart" target="_blank" rel="external">源代码</a>在Github上开源，而且还提供了一个简易版的服务器程序供开发者使用，虽然官方建议不要在生产环境下使用，但是公司自己用用还是无妨的。</p>
+<h3 id="Dart的依赖"><a href="#Dart的依赖" class="headerlink" title="Dart的依赖"></a>Dart的依赖</h3><p>说到仓库就先说一下Dart工程的依赖方法</p>
+<p>1.中心库依赖，默认从官网拉取</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">dependencies:</div><div class="line">  transmogrify: ^<span class="number">1.0</span><span class="number">.0</span></div></pre></td></tr></table></figure>
+<p>2.自定义服务器拉取</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">dependencies:</div><div class="line">  transmogrify:</div><div class="line">    hosted:</div><div class="line">      name: transmogrify</div><div class="line">      url: http:<span class="comment">//some-package-server.com</span></div><div class="line">    version: ^<span class="number">1.0</span><span class="number">.0</span></div></pre></td></tr></table></figure>
+<p>3.git仓库依赖</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">dependencies:</div><div class="line">  kittens:</div><div class="line">    git:</div><div class="line">      url: git:<span class="comment">//github.com/munificent/kittens.git</span></div><div class="line">      ref: some-branch</div><div class="line">      path: path/to/kittens</div></pre></td></tr></table></figure>
+<p>4.本地路径依赖</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">dependencies:</div><div class="line">  transmogrify:</div><div class="line">    path: /Users/me/transmogrify</div></pre></td></tr></table></figure>
+<blockquote>
+<p>我们要使用的就是方法二从我们的库服务器上拉取包</p>
+</blockquote>
+<h3 id="搭建服务器"><a href="#搭建服务器" class="headerlink" title="搭建服务器"></a>搭建服务器</h3><p>官方提供了一个建议服务器程序，也是由dart编写，github地址为<a href="https://github.com/kahnsen/pub_server" target="_blank" rel="external">https://github.com/kahnsen/pub_server</a>，我自己fork了一个，做了些许修改。</p>
+<h4 id="搭建步骤"><a href="#搭建步骤" class="headerlink" title="搭建步骤"></a>搭建步骤</h4><ol>
+<li>git clone <a href="https://github.com/dart-lang/pub_server.git" target="_blank" rel="external">https://github.com/dart-lang/pub_server.git</a></li>
+<li>cd pub_server 进入文件夹</li>
+<li>pub get 拉取dart需要的依赖库（刚刚说了，这个服务端程序也是由dart编写的）<ul>
+<li>如果没有pub命令，可以去官网下载dart sdk</li>
+</ul>
+</li>
+</ol>
+<p>成功后调用dart example/example.dart -d /tmp/package-db，意思是运行example/example.dart文件。/tmp/package-db是参数，以后上传的包都在这个路径下。</p>
+<p>运行成功后，命令行出现</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Listening on http:<span class="comment">//localhost:8080</span></div><div class="line"></div><div class="line">To make the pub client use <span class="keyword">this</span> repository configure your shell via:</div><div class="line"></div><div class="line">    $ <span class="keyword">export</span> PUB_HOSTED_URL=http:<span class="comment">//localhost:8080</span></div></pre></td></tr></table></figure>
+<p>说明已经运行成功了，服务器网址为<a href="http://localhost:8080。地址和端口号可以在example/example.dart文件中修改。" target="_blank" rel="external">http://localhost:8080。地址和端口号可以在example/example.dart文件中修改。</a></p>
+<p>现在已经可以上传你的包了</p>
+<h3 id="上传dart包"><a href="#上传dart包" class="headerlink" title="上传dart包"></a>上传dart包</h3><p>在AndroidStudio新建一个Flutter库（过程忽略）。</p>
+<p>一个可以上传的简易pubspec.yaml示例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">name: test_flutter_plugin</div><div class="line">description: A new Flutter plugin.</div><div class="line">version: 0.0.1</div><div class="line">author: kahn &lt;xxx@xxx.com&gt;</div><div class="line">homepage: https://kahnsen.github.io/kahnblog/</div><div class="line">publish_to: http://localhost:8080</div><div class="line"></div><div class="line">environment:</div><div class="line">  sdk: &quot;&gt;=2.0.0-dev.68.0 &lt;3.0.0&quot;</div><div class="line"></div><div class="line">dependencies:</div><div class="line">  flutter:</div><div class="line">    sdk: flutter</div><div class="line"></div><div class="line">flutter:</div><div class="line">  plugin:</div><div class="line">    androidPackage: com.kahn.testflutterplugin</div><div class="line">    pluginClass: TestFlutterPlugin</div></pre></td></tr></table></figure>
+<p>在根目录调用(此步骤可忽略，–dry-run是检测是否可以上传的意思，不会真正的上传包)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pub publish --dry-run</div></pre></td></tr></table></figure>
+<p>该命令会提示你，还缺少哪些配置和文件，按照提示来就好了。</p>
+<p>不带 –dry-run，直接运行pub publish就会真正的上传包了。</p>
+<p>中间会有一个授权google的过程，跟上传到官网是一样的。</p>
+<blockquote>
+<p>中间有一个需要注意的地方，publish_to: <a href="http://localhost:8080" target="_blank" rel="external">http://localhost:8080</a> 这个一定要配置，如果不配置的话默认会上传到官方中心库。这个地址就是你私人库的地址。如果不想上传到任何的地方，可以先配置成none</p>
+<blockquote>
+<p>也可以修改环境变量来修改 export PUB_HOSTED_URL=<a href="http://localhost:8080" target="_blank" rel="external">http://localhost:8080</a></p>
+</blockquote>
+</blockquote>
+<p>看到SUCCESS，恭喜你，上传成功了。</p>
+<h3 id="pub-server的example-example-dart"><a href="#pub-server的example-example-dart" class="headerlink" title="pub_server的example/example.dart"></a>pub_server的example/example.dart</h3><p>如果你实在上传不成功，就去看一下这个dart文件。main默认接收了几个参数，其中有一个参数叫<em>standalone</em>，表示是否只使用本地的dart库。我把它改成了true。example.dart中还可以修改地址，端口号，库路径等等。</p>
+<p>ps: pub_server收到上传来的dart库后，会把这些dart往中心库再上传一份，所有操作有会和中心库同步，在你拉取库的时候，它也会去官网拉库。相当于是中心库的一个镜像。墙内用户你懂得，会导致你失败。</p>
+<h3 id="库目录"><a href="#库目录" class="headerlink" title="库目录"></a>库目录</h3><p>文件路径</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">package-db</div><div class="line">--test_flutter_plugin</div><div class="line">---<span class="number">-0.0</span><span class="number">.1</span></div><div class="line">------package.tar.gz</div><div class="line">------pubspec.yaml</div><div class="line">---<span class="number">-0.0</span><span class="number">.2</span></div></pre></td></tr></table></figure>
+<p>其实就是你的库名，然后按版本号分文件夹，里面是你上传的pubspec.yaml和代码的压缩包</p>
+<blockquote>
+<p>保存好你的库文件，不要被系统自动回收了，不然哭都没地儿哭。</p>
+</blockquote>
+<h3 id="尾声"><a href="#尾声" class="headerlink" title="尾声"></a>尾声</h3><p>如果不嫌费事，也可以使用官网的开源代码搭建一个含搜索的自己的中心库。或许将来也会有nexus for dart。</p>
+<p>据说官网上传的时候，每个库有10MB的显示。所以尽量使用模块开发吧。</p>
+<p>dart官网建议的开发流程</p>
+<ol>
+<li>在本地开发时，配置pubspec，使用本地路径依赖</li>
+<li>在主程序依赖这些本地库</li>
+<li>可以发布时，就把依赖库发布到中心库中。</li>
+<li>将pubspec修改为依赖中心库</li>
+<li>如果需要，主程序也可以发布到中心库</li>
+</ol>
+<p>其实开发时，git依赖也是一个不错的选择。</p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+        
+            <li class="next">
+                <a href= "/kahnblog/2018/07/20/Flutter了解一下？/" title= Flutter了解一下？ >
+                    <span>Next Post</span>
+                    <span>Flutter了解一下？</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 来必力City版安装代码 -->
+
     
-    
-    
-        <article class="index-post">
-            <a class="content-show-full" href = "/kahnblog/2017/09/12/Android集成RN/" >
-                    <h2 class="abstract-title">
-                        
-                        <span>现有原生Android应用集成RN（React Native Android）开发环境</span>
-                    </h2>
-                <div class="abstract-content">
-                    现有原生Android应用集成RN（React Native Android）开发环境
-官网教程中文教程
-环境搭建因为本人使用的是macbook，所以只记录mac上的搭建过程，windows自行...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = Android>Android</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = RN>RN</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/09/12</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="content-show-full" href = "/kahnblog/2017/09/11/你还敢说精通Java吗？/" >
-                    <h2 class="abstract-title">
-                        
-                        <span>你还敢说精通Java吗？</span>
-                    </h2>
-                <div class="abstract-content">
-                    快毕业的时候为了找工作，去学J2EE。当时狠是被什么三大框架，js，mysql，tomcat，设计模式虐了一把。后来机缘巧合（被经理忽悠），入了Android的坑，前后端一起做。一眨眼五六年过去...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = Java>Java</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/09/11</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="content-show-full" href = "/kahnblog/2017/09/08/Markdown-Help/" >
-                    <h2 class="abstract-title">
-                        
-                        <span>Markdown Help</span>
-                    </h2>
-                <div class="abstract-content">
-                    MacDown
-Hello there! I’m MacDown, the open source Markdown editor for OS X.
-Let me introduce myse...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = Reproduced>Reproduced</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = Tools>Tools</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/09/08</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="content-show-full" href = "/kahnblog/2017/09/08/开源许可证/" >
-                    <h2 class="abstract-title">
-                        
-                        <span>开源许可证文章整理</span>
-                    </h2>
-                <div class="abstract-content">
-                    如何为代码选择开源许可证，这是一个问题。世界上的开源许可证，大概有上百种。很少有人搞得清楚它们的区别。即使在最流行的六种—-GPL、BSD、MIT、Mozilla、Apache和LGPL—-之中...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = Software>Software</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = Reproduced>Reproduced</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2017/09/08</span>
-                </div>
-            </div>
-        </article>
-    
-    <!-- paginator  -->
-    
-    <nav class="page-nav">
-        <a class="extend prev" rel="prev" href="/kahnblog/archives/2017/">#PREV</a><a class="page-number" href="/kahnblog/archives/2017/">1</a><span class="page-number current">2</span>
-    </nav>
-    
+
+<!-- City版安装代码已完成 -->
 </main>
             <!-- profile -->
             
