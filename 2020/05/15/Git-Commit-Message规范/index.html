@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        Git Commit Message规范 · Kahn&#39;s blogs
+        
+    </title>
+    <link rel="icon" href= /kahnblog/avatar/Totoro.jpeg>
+    <!-- 提前加载place holder  -->
+    <style>
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url('/kahnblog/font/Oswald-Regular.ttf');
+        }
+        @font-face {
+            font-family: 'Source Sans Pro';
+            src: url('/kahnblog/font/Source Sans Pro.woff'),
+            url('/kahnblog/font/Source Sans Pro.woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Source Code Pro';
+            src: url('/kahnblog/font/SourceCodePro-Regular.ttf.woff'),
+            url('/kahnblog/font/SourceCodePro-Regular.ttf.woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        
+        .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0px;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        99% {
+            transform: translate3d(0, 0, 0);
+        }
+        99.1% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(-226px, 0, 0);
+        }
+    }
+    </style>
+    <link rel="stylesheet" href="/kahnblog/css/style.css">
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/kahnblog/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/kahnblog/" >Kahn&#39;s blogs</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">Git Commit Message规范</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/kahnblog/>Kahn's blogs</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+    
+    <div class="site-intro-img" style="background-image: url(/kahnblog/intro/post-bg.jpg)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            Git Commit Message规范
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+        </p>
+        <!-- 404 -->
+        
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2020/05/15</span>
+            </div>
+            <!-- 
+
+<div class="post-share iconfont-archer">
+    <ul class="share-box" data-href = "/kahnblog/2020/05/15/Git-Commit-Message规范/" data-title = "Git Commit Message规范" >
+        <li class="to-weibo">分享到微博</li>
+        <li class="to-wechat">分享到微信</li>
+        <li class="to-qq">分享到QQ</li>
+        <li class="to-twitter">分享到twitter</li>
+    </ul>
+</div> -->
+        
+    </div>
+</div>
+        <div class="container">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="Git-Commit-Message规范"><a href="#Git-Commit-Message规范" class="headerlink" title="Git Commit Message规范"></a>Git Commit Message规范</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><h3 id="提交规范选择"><a href="#提交规范选择" class="headerlink" title="提交规范选择"></a>提交规范选择</h3><p>当一个项目有着频繁大量的git提交，如果提交信息能够规范起来，可以大大减少回溯问题的时间成本。规范的提交信息还可以用作CHANGELOG。</p>
+<p>查询了一下大厂和开源项目的gitcommit提交规范，比较流行的是Conventional Commits规约。这套规约是在Angular convention的基础上进行改造和扩展，形成了一套简约轻量级的提交约束规范。</p>
+<h3 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h3><p>既然有了规范，如果能有工具进行约定和限制就更好了。把约定俗称，变为开发规定。</p>
+<p>进行约束git commit message的工具有很多，我们这里既然使用Conventional Commits，就去找了Conventional Commits相关的工具。下面是本文用到的工具列表</p>
+<ul>
+<li><a href="https://github.com/commitizen/cz-cli" target="_blank" rel="external">commitizen</a> ：用来规范化提交的git命令号工具，</li>
+<li><a href="https://github.com/commitizen/cz-conventional-changelog" target="_blank" rel="external">cz-conventional-changelog</a> ：Conventional Commits规范，它和<a href="https://github.com/commitizen/cz-cli" target="_blank" rel="external">commitizen</a> 配合使用，让<a href="https://github.com/commitizen/cz-cli" target="_blank" rel="external">commitizen</a> 使用Conventional Commits规约来约束</li>
+<li><a href="https://github.com/conventional-changelog/commitlint" target="_blank" rel="external">commitlint</a> git hook的规则，提供Conventional Commits在git hook上的规则</li>
+<li><a href="https://github.com/typicode/husky" target="_blank" rel="external">husky</a> git hook小工具，它可以方便的应用一些hook规则</li>
+</ul>
+<p>总结一下我们要用到的工具：</p>
+<ol>
+<li>提交时编写符合规则的message工具：<a href="https://github.com/commitizen/cz-cli" target="_blank" rel="external">commitizen</a>负责提供一个git提交命令行程序，它使用的规则由<a href="https://github.com/commitizen/cz-conventional-changelog" target="_blank" rel="external">cz-conventional-changelog</a>来提供。</li>
+<li>提交后的检测工具：<a href="https://github.com/typicode/husky" target="_blank" rel="external">husky</a> 用来简易的使用git hook，而真正的检测规则提供者是<a href="https://github.com/conventional-changelog/commitlint" target="_blank" rel="external">commitlint</a> </li>
+</ol>
+<blockquote>
+<p>git hook本质上提供了一套检测时机，可以在和git交互的过程中介入。我们用到的git hook就是commit-msg。常用的git hook还有pre-commit，在提交前检查提交的内容，可以静态检测提交代码来决定是否允许提交</p>
+</blockquote>
+<h3 id="规范简介"><a href="#规范简介" class="headerlink" title="规范简介"></a>规范简介</h3><p>一个符合Conventional Commits规范的提交信息样板</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;type&gt;[optional scope]: &lt;description&gt;</div><div class="line"></div><div class="line">[optional body]</div><div class="line"></div><div class="line">[optional footer(s)]</div></pre></td></tr></table></figure>
+<ol>
+<li>type：提交类型，冒号后面要有空格。简单的说有feat，fix，docs等等。具体可查看 <a href="https://github.com/conventional-changelog/commitlint/tree/master/%40commitlint/config-conventional" target="_blank" rel="external">@commitlint/config-conventional</a>。<strong>注意，既然是规范，type类型是固定，一定要是规则里面有的。不要自己创造什么task，update，delete</strong></li>
+<li>scope 影响返回</li>
+<li>description简单描述，相当于标题</li>
+<li>optional body可选的内容，提交的详细描述。注意，该选项和上面要有空行</li>
+<li>optional footer(s)可选的注脚，一般在进行重大修改，影响了别的模块的时候，一定要写。注意，该选项和上面要有空行</li>
+</ol>
+<p>很简单吧？</p>
+<p>举个例子（官网上的）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">fix: correct minor typos in code</div><div class="line"></div><div class="line">see the issue for details</div><div class="line"></div><div class="line">on typos fixed.</div><div class="line"></div><div class="line">Reviewed-by: Z</div><div class="line">Refs #133</div></pre></td></tr></table></figure>
+<p>修复了一个bug的提交，它的bugid是133</p>
+<h4 id="type只允许以下几个"><a href="#type只允许以下几个" class="headerlink" title="type只允许以下几个"></a>type只允许以下几个</h4><ul>
+<li>feat：新功能（feature）</li>
+<li>fix：修补bug</li>
+<li>docs：文档（documentation）</li>
+<li>style： 格式（不影响代码运行的变动）</li>
+<li>refactor：重构（即不是新增功能，也不是修改bug的代码变动）</li>
+<li>test：增加测试</li>
+<li>chore：构建过程或辅助工具的变动</li>
+</ul>
+<p>如果type是feat和fix，一定会进入你生成changelog。别的可以指定</p>
+<h2 id="开始吧"><a href="#开始吧" class="headerlink" title="开始吧"></a>开始吧</h2><h3 id="工具安装"><a href="#工具安装" class="headerlink" title="工具安装"></a>工具安装</h3><p>因为这些工具，规范都是基于Conventional Commits规约，而Conventional Commits规约由是从Angular团队(一个基于js的web开发框架，google的。)发展而来，所以好多工具都是在node的基础上安装的，没有node的请自行安装。推荐使用nvm来管理node版本（不要用n）。</p>
+<h4 id="全局安装commitizen-和-cz-conventional-changelog"><a href="#全局安装commitizen-和-cz-conventional-changelog" class="headerlink" title="全局安装commitizen 和 cz-conventional-changelog"></a>全局安装commitizen 和 cz-conventional-changelog</h4><p>在终端里执行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install -g commitizen cz-conventional-changelog echo '&#123; "path": "cz-conventional-changelog" &#125;' &gt; ~/.czrc</div></pre></td></tr></table></figure>
+<p>解释一下：</p>
+<ol>
+<li>npm是node的命令</li>
+<li>这里-g是指全局安装，本命令同时安装了两个模块，commitizen和cz-conventional-changelog</li>
+<li>echo ‘{ “path”: “cz-conventional-changelog” }’ &gt; ~/.czrc是指往.czrc文件里写入一句配置，指定了commitizen使用的规则就是cz-conventional-changelog</li>
+</ol>
+<p>现在可以试一下了，用git cz来代替git commit命令，你会发现git提交变成一个有交互引导的过程</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜  testgitcommit git:(master) ✗ git cz</div><div class="line">cz-cli@4.1.2, cz-conventional-changelog@3.2.0</div><div class="line"></div><div class="line">? Select the type of change that you're committing: (Use arrow keys)</div><div class="line">❯ feat:     A new feature</div><div class="line">  fix:      A bug fix</div><div class="line">  docs:     Documentation only changes</div><div class="line">  style:    Changes that do not affect the meaning of the code (white-space, for</div><div class="line">matting, missing semi-colons, etc)</div><div class="line">  refactor: A code change that neither fixes a bug nor adds a feature</div><div class="line">  perf:     A code change that improves performance</div><div class="line">(Move up and down to reveal more choices)</div></pre></td></tr></table></figure>
+<p>输入git cz后，会让你选是一个什么类型的提交。这里我选定的是feat，一个新功能。一路回车</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">? Select the type of change that you're committing: feat:     A new feature</div><div class="line">? What is the scope of this change (e.g. component or file name): (press enter t</div><div class="line">o skip) test.text</div><div class="line">? Write a short, imperative tense description of the change (max 55 chars):</div><div class="line"> (10) add string</div><div class="line">? Provide a longer description of the change: (press enter to skip)</div><div class="line"> add string be happy</div><div class="line">? Are there any breaking changes? No</div><div class="line">? Does this change affect any open issues? No</div><div class="line">husky &gt; commit-msg (node v10.20.1)</div><div class="line">[master 75712ce] feat(test.text): add string</div><div class="line"> 1 file changed, 1 insertion(+), 1 deletion(-)</div><div class="line">➜  testgitcommit git:(master) ✗</div></pre></td></tr></table></figure>
+<p><img src="image-20200515150501088.png" alt="image-20200515150501088"></p>
+<p>最后提交到git上的message就是这样的</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">feat(test.text): add string</div><div class="line"></div><div class="line">add string be happy</div></pre></td></tr></table></figure>
+<blockquote>
+<p> 类型是feat，范围是test.text，小标题是add string，主题内容是add string be happy</p>
+</blockquote>
+<h4 id="安装commitlint-和-husky"><a href="#安装commitlint-和-husky" class="headerlink" title="安装commitlint 和 husky"></a>安装commitlint 和 husky</h4><p>这两个工具是为了在git层面上限制提交的，所以我们要装在项目内，如果你想全局安装也可以。</p>
+<p><strong>安装前，这里有个需要注意的地方，不然会失败</strong></p>
+<p>因为这两个工具是node的工具，所以安装前项目根目录中要有package.json</p>
+<p>可以使用npm初始化一个，也可以自己创建一个空的。</p>
+<p>一切准备就绪，命令行执行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd 项目根目录</div><div class="line">npm i -D husky @commitlint/config-conventional @commitlint/cli</div></pre></td></tr></table></figure>
+<p>同样的，安装了三个model：husky，@commitlint/config-conventional，@commitlint/cli</p>
+<h5 id="配置1"><a href="#配置1" class="headerlink" title="配置1"></a>配置1</h5><p>安装完成后，调用命令行调用</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo 'module.exports = &#123;extends: ["@commitlint/config-conventional"]&#125;;' &gt; ./commitlint.config.js</div></pre></td></tr></table></figure>
+<p>在项目根目录创建一个文件commitlint.config.js，并写入配置</p>
+<h5 id="配置2"><a href="#配置2" class="headerlink" title="配置2"></a>配置2</h5><p>在安装成功后，package.json内容应该多了</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="string">"devDependencies"</span>: &#123;</div><div class="line">    <span class="string">"@commitlint/cli"</span>: <span class="string">"^8.3.5"</span>,</div><div class="line">    <span class="string">"@commitlint/config-conventional"</span>: <span class="string">"^8.3.4"</span>,</div><div class="line">    <span class="string">"husky"</span>: <span class="string">"^4.2.5"</span></div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>我们再把husky的相关配置写入进去，平级添加</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="string">"husky"</span>: &#123;</div><div class="line">    <span class="string">"hooks"</span>: &#123;</div><div class="line">      <span class="string">"commit-msg"</span>: <span class="string">"commitlint -e $GIT_PARAMS"</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>用commitlint，在hucky的配置下，添加到git hook上</p>
+<h3 id="调试使用"><a href="#调试使用" class="headerlink" title="调试使用"></a>调试使用</h3><p>配置到这里应该就大功告成了，来试一下非法提交，命令行提交一条记录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜  testgitcommit git:(master) ✗ git add test.text</div><div class="line">➜  testgitcommit git:(master) ✗ git commit -m "xxxxx"</div><div class="line">husky &gt; commit-msg (node v10.20.1)</div><div class="line">⧗   input: xxxxx</div><div class="line">✖   subject may not be empty [subject-empty]</div><div class="line">✖   type may not be empty [type-empty]</div><div class="line"></div><div class="line">✖   found 2 problems, 0 warnings</div><div class="line">ⓘ   Get help: https://github.com/conventional-changelog/commitlint/#what-is-commitlint</div><div class="line"></div><div class="line">husky &gt; commit-msg hook failed (add --no-verify to bypass)</div><div class="line">➜  testgitcommit git:(master) ✗</div></pre></td></tr></table></figure>
+<p>可以看到，它提示了subject may not be empty [subject-empty]和type may not be empty [type-empty]。最后它还告诉你，<strong>如果想跳过git hook，可以添加–no-verify参数</strong></p>
+<h3 id="使用提交信息生成changelog"><a href="#使用提交信息生成changelog" class="headerlink" title="使用提交信息生成changelog"></a>使用提交信息生成changelog</h3><h4 id="conventional-changelog"><a href="#conventional-changelog" class="headerlink" title="conventional-changelog"></a>conventional-changelog</h4><h5 id="工具安装-1"><a href="#工具安装-1" class="headerlink" title="工具安装"></a>工具安装</h5><p>在命令行执行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install -g conventional-changelog-cli</div></pre></td></tr></table></figure>
+<h5 id="生成文件"><a href="#生成文件" class="headerlink" title="生成文件"></a>生成文件</h5><p>安装完毕后，执行</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"># 不会生成changelog文件，会在头部增加自上个版本以来的</div><div class="line">$ conventional-changelog -p angular -i CHANGELOG.md -s -p </div><div class="line"></div><div class="line"># 直接输出changelog</div><div class="line">$ conventional-changelog -p angular -i CHANGELOG.md -w -r</div><div class="line"></div><div class="line"># 直接生成chengelog文件</div><div class="line">$ conventional-changelog -p angular -i CHANGELOG.md -s</div></pre></td></tr></table></figure>
+<h5 id="简化配置"><a href="#简化配置" class="headerlink" title="简化配置"></a>简化配置</h5><p>因为是node项目配置，所以这里我们可以使用nodejs的配置来简化命令</p>
+<p>在package.json中增加script节点，里面的每一个key value都是可以执行的命令</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="string">"scripts"</span>: &#123;</div><div class="line">  <span class="string">"changelog"</span>: <span class="string">"conventional-changelog -p angular -i CHANGELOG.md -w -r 0"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们可以直接运行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm run changelog</div></pre></td></tr></table></figure>
+<p>这时你会发现，根目录多个changelog.md文件，内容是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">#  (2020-05-15)</div><div class="line"></div><div class="line"></div><div class="line">### Features</div><div class="line"></div><div class="line">* **test:** test 722ad73</div><div class="line">* **test.text:** add string 75712ce</div></pre></td></tr></table></figure>
+<p>发现问题了没？没有版本号</p>
+<h5 id="版本控制"><a href="#版本控制" class="headerlink" title="版本控制"></a>版本控制</h5><p>简单说下npm的version</p>
+<p>正常流程，生成changlog前需要升级版本号，而node项目升级版本号需要执行npm version xxx，</p>
+<p>执行后node工具会自动把package.json中的version版本号给改掉，然后在git上打标签后自动提交。</p>
+<p>以下是我指定版本号后的changelog，自动生成的tab就是v1.0.1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">## [1.0.1](/compare/722ad73d9a44158e861619ac8c357264ef832f47...v1.0.1) (2020-05-15)</div><div class="line"></div><div class="line"></div><div class="line">### Features</div><div class="line"></div><div class="line">* **test:** test 722ad73</div><div class="line">* **test.text:** add string 75712ce</div></pre></td></tr></table></figure>
+<p>node项目版本号的更多内容，可以参考<a href="http://buzhundong.com/post/%E7%89%88%E6%9C%AC%E5%8F%B7%E7%AE%A1%E7%90%86%E7%AD%96%E7%95%A5-%E4%BD%BF%E7%94%A8npm%E7%AE%A1%E7%90%86%E9%A1%B9%E7%9B%AE%E7%89%88%E6%9C%AC%E5%8F%B7.html" target="_blank" rel="external">版本号管理策略&amp;&amp;使用npm管理项目版本号</a>这篇文章。</p>
+<p>当然我们自己有版本号控制，不需要npm多操心，这里可以多参考conventional-changelog –help命令帮助，看看怎么生成你心仪的changelog</p>
+<h4 id="Standard-Version"><a href="#Standard-Version" class="headerlink" title="Standard Version"></a><a href="https://github.com/conventional-changelog/standard-version" target="_blank" rel="external">Standard Version</a></h4><p>这个工具也是Conventional Commits规约推荐的生成changelog和版本发布打tag的工具</p>
+<p>想使用可以看下readme</p>
+<h3 id="IDE插件和模板设置"><a href="#IDE插件和模板设置" class="headerlink" title="IDE插件和模板设置"></a>IDE插件和模板设置</h3><h4 id="AndroidStudio"><a href="#AndroidStudio" class="headerlink" title="AndroidStudio"></a>AndroidStudio</h4><ul>
+<li><a href="https://github.com/lppedd/idea-conventional-commit" target="_blank" rel="external">Conventional Commit</a>: provides extensible context and template-based completion, and inspections, for Conventional Commits inside the VCS Commit dialog. Available for all <a href="https://www.jetbrains.com/" target="_blank" rel="external">JetBrains IDEs</a>. <ul>
+<li>这个界面和原VCS界面一样，只是在提交的时候，有联想关联提示</li>
+</ul>
+</li>
+<li><a href="https://plugins.jetbrains.com/plugin/9861-git-commit-template" target="_blank" rel="external">Git Commit Template</a>: Add Conventional Commits support to <a href="https://www.jetbrains.com/" target="_blank" rel="external">JetBrains Editors</a> (IntelliJ IDEA, PyCharm, PhpStorm…).<ul>
+<li>这是直接有一个UI让你填入各种type，scope信息。</li>
+</ul>
+</li>
+</ul>
+<h4 id="SourceTree"><a href="#SourceTree" class="headerlink" title="SourceTree"></a>SourceTree</h4><p>只能设置模板</p>
+<p>我这里只是简单设置，如果规约熟悉了之后，可以不用设</p>
+<p><img src="image-20200515171307576.png" alt="image-20200515171307576"></p>
+<h4 id="Git-提交全局模板"><a href="#Git-提交全局模板" class="headerlink" title="Git 提交全局模板"></a>Git 提交全局模板</h4><p>先去~/.git/目录下创建一个模板文件commit.txt，内容随你</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git config --global commit.template ~/.git/commit.txt</div></pre></td></tr></table></figure>
+<p>或者也可以修改.git目下的config</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[commit]</div><div class="line">template=~/.git/commit.txt</div></pre></td></tr></table></figure>
+<h2 id="遇到的坑"><a href="#遇到的坑" class="headerlink" title="遇到的坑"></a>遇到的坑</h2><h3 id="package-json"><a href="#package-json" class="headerlink" title="package.json"></a>package.json</h3><p>package.json要提前创建好，再去安装commitlint 和 husky，不然配置写不进去，到时候一脸懵逼</p>
+<h3 id="node版本问题"><a href="#node版本问题" class="headerlink" title="node版本问题"></a>node版本问题</h3><p>因为husky要node版本>10，我本机的node版本是8.x，所以就用nvm安装了一个10.x的node，结果以前全局安装的npm工具模块都要重新安装。当重新使用npm安装<a href="https://secure.phabricator.com/book/phabricator/article/arcanist/" target="_blank" rel="external">arcanist</a> （公司团队arcanist来进行codereview）的时候，发现版本过高，arc没有顺利安装成功，命令没法用了。</p>
+<p>解决办法：其实arc已经安装成功了，只是npm里面一些函数再创建arc命令的软连接时失败了。这时，我们找到nvm的node版本的bin目录和arc模块的bin目录，重新手动把arc模块的命令shell软连接到node中就可以了</p>
+<p>下面是我本机的目录</p>
+<p>arc shell的具体路径</p>
+<p>/Users/xxx/.nvm/versions/node/v10.20.1/lib/node_modules/arcanist/arcanist/bin/arc</p>
+<p>node执行文件目录</p>
+<p>/Users/xxx/.nvm/versions/node/v10.20.1/bin</p>
+<p>把原先/Users/xxx/.nvm/versions/node/v10.20.1/bin中的arc删掉，然后执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ln -s xxx/arc xxx/arc</div></pre></td></tr></table></figure>
+<p> 命令软连接过去就行了</p>
+<h3 id="SourceTree的非法提交没有被阻止"><a href="#SourceTree的非法提交没有被阻止" class="headerlink" title="SourceTree的非法提交没有被阻止"></a>SourceTree的非法提交没有被阻止</h3><ol>
+<li><p>由于SourceTree会默认使用内置的git版本，而不使用你本机的。所以修改SourceTree的内置git版本，大于2.13.0就行了，我的是2.13.2</p>
+</li>
+<li><p>如果还是没阻止（hook没起作用），提交的时候打开【显示命令历史】，看下有没有什么错误。如果出现Skipping commit-msg hook的时候，需要在根目录创建一个husky的配置文件.huskyrc，内容填写</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">export NVM_DIR="$HOME/.nvm"</div><div class="line">[ -s "$NVM_DIR/nvm.sh" ] &amp;&amp; \. "$NVM_DIR/nvm.sh"</div></pre></td></tr></table></figure>
+</li>
+<li><p>再去试试应该就行了</p>
+<p><img src="image-20200515164640535.png" alt="image-20200515164640535"></p>
+</li>
+</ol>
+<p>下面是解决sourcetree问题搜到的issues</p>
+<p><a href="https://github.com/typicode/husky/issues/639" target="_blank" rel="external">Husky hooks skipped #639</a></p>
+<p>[issues390][<a href="https://github.com/typicode/husky/issues/390" target="_blank" rel="external">https://github.com/typicode/husky/issues/390</a>]</p>
+<p><img src="image-20200514184006713.png" alt="image-20200514184006713"></p>
+<h2 id="参考和官网"><a href="#参考和官网" class="headerlink" title="参考和官网"></a>参考和官网</h2><ul>
+<li><a href="https://www.conventionalcommits.org/en/v1.0.0/#specification" target="_blank" rel="external">Conventional Commits官网</a> </li>
+<li><a href="https://github.com/typicode/husky" target="_blank" rel="external">husky：Github地址</a></li>
+<li><a href="https://zj-git-guide.readthedocs.io/zh_CN/latest/message/[CommitLint][Husky]%E6%B6%88%E6%81%AF%E6%A0%A1%E9%AA%8C%E5%B7%A5%E5%85%B7/" target="_blank" rel="external">CommitLint Husky消息校验工具</a></li>
+<li><a href="https://juejin.im/post/5d0b3f8c6fb9a07ec07fc5d0" target="_blank" rel="external">Git commit message 规范(人人贷)</a></li>
+<li><a href="https://kiethuynh.wordpress.com/2017/12/05/pre-commit-hook-itll-git-ya/" target="_blank" rel="external">Pre-Commit Hook, it’ll Git ya!</a></li>
+<li><a href="https://www.ruanyifeng.com/blog/2016/01/commit_message_change_log.html" target="_blank" rel="external">Commit message 和 Change log 编写指南  阮一峰</a></li>
+<li><a href="https://juejin.im/post/5c88af6de51d4552f05bacff" target="_blank" rel="external">规范化 Git 合作流程 Standard Version</a></li>
+</ul>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+        
+            <li class="next">
+                <a href= "/kahnblog/2019/03/04/学习Dart语言随手笔记/" title= 学习Dart语言随手笔记 >
+                    <span>Next Post</span>
+                    <span>学习Dart语言随手笔记</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 来必力City版安装代码 -->
+
+    
+
+<!-- City版安装代码已完成 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="emailto:kahn_2009@live.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/kahnsen" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span>
+        <span
+            id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_pv"></span>
+        </span>
+    </div>
+    
+</footer>
+    </div>
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-category">
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 22 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/15</span><a class="archive-post-title" href= "/kahnblog/2020/05/15/Git-Commit-Message规范/" >Git Commit Message规范</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/04</span><a class="archive-post-title" href= "/kahnblog/2019/03/04/学习Dart语言随手笔记/" >学习Dart语言随手笔记</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/28</span><a class="archive-post-title" href= "/kahnblog/2018/12/28/Dart依赖和搭建Flutter-or-Dart简易私人仓库/" >Dart依赖和搭建Flutter or Dart简易私人仓库</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/20</span><a class="archive-post-title" href= "/kahnblog/2018/07/20/Flutter了解一下？/" >Flutter了解一下？</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span><a class="archive-post-title" href= "/kahnblog/2018/07/06/使用Python创建你自己的CLI工具箱/" >使用Python的Plumbum库创建你自己的CLI工具箱</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/29</span><a class="archive-post-title" href= "/kahnblog/2018/06/29/Python3学习笔记/" >Python3学习笔记</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/03</span><a class="archive-post-title" href= "/kahnblog/2018/05/03/用Android-productFlavors-构建你的多面应用/" >用Android productFlavors 构建你的多面应用 </a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/kahnblog/2017/12/05/Annotation-Processing-Tool/" >Annotation Processing Tool</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/29</span><a class="archive-post-title" href= "/kahnblog/2017/11/29/ASM全解析/" >ASM全解析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/23</span><a class="archive-post-title" href= "/kahnblog/2017/11/23/Git常用命令备忘/" >Git常用命令备忘</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/17</span><a class="archive-post-title" href= "/kahnblog/2017/11/17/搭建Jenkins-Git-Gradle持续集成CI打包平台/" >搭建Jenkins+Git+Gradle持续集成CI打包平台</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/kahnblog/2017/10/30/Java-7-and-Java-8特性你有用过吗？一/" >Java 7 and Java 8特性你有用过吗？二</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/kahnblog/2017/09/27/Java-7-and-Java-8特性你有用过吗？/" >Java 7 and Java 8特性你有用过吗？一</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/19</span><a class="archive-post-title" href= "/kahnblog/2017/09/19/Android原生app加载RN界面原理/" >Android原生app加载RN界面过程</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/15</span><a class="archive-post-title" href= "/kahnblog/2017/09/15/RN环境-Android原生和JS交互/" >RN环境 Android原生和JS交互</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/14</span><a class="archive-post-title" href= "/kahnblog/2017/09/14/Dagger-2-迁移方案和生成代码基本原理/" >Dagger 2 迁移方案和生成代码基本原理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/14</span><a class="archive-post-title" href= "/kahnblog/2017/09/14/EventBus3-0源代码全解析/" >EventBus3.0源代码全解析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/kahnblog/2017/09/12/Android集成RN/" >现有原生Android应用集成RN（React Native Android）开发环境</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/11</span><a class="archive-post-title" href= "/kahnblog/2017/09/11/你还敢说精通Java吗？/" >你还敢说精通Java吗？</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/08</span><a class="archive-post-title" href= "/kahnblog/2017/09/08/Markdown-Help/" >Markdown Help</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/08</span><a class="archive-post-title" href= "/kahnblog/2017/09/08/开源许可证/" >开源许可证文章整理</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2014 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/11</span><a class="archive-post-title" href= "/kahnblog/2014/06/11/UML复习备忘录/" >UML复习备忘录</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">Software</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Java</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Android</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">RN</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Dart</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Flutter</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Tools</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Reproduced</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Dagger</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Python</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Python3</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">EventBus</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/kahnblog/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+
