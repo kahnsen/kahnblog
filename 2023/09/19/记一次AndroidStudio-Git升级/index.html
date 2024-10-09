@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html>
+    <head><meta name="generator" content="Hexo 3.9.0">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>
+        
+        记一次AndroidStudio Git升级 · Kahn&#39;s blogs
+        
+    </title>
+    <link rel="icon" href="/kahnblog/avatar/Totoro.jpeg">
+    <!-- 提前加载place holder  -->
+    <style>
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url('/kahnblog/font/Oswald-Regular.ttf');
+        }
+        @font-face {
+            font-family: 'Source Sans Pro';
+            src: url('/kahnblog/font/Source Sans Pro.woff'),
+            url('/kahnblog/font/Source Sans Pro.woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Source Code Pro';
+            src: url('/kahnblog/font/SourceCodePro-Regular.ttf.woff'),
+            url('/kahnblog/font/SourceCodePro-Regular.ttf.woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        
+        .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0px;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        99% {
+            transform: translate3d(0, 0, 0);
+        }
+        99.1% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(-226px, 0, 0);
+        }
+    }
+    </style>
+    <link rel="stylesheet" href="/kahnblog/css/style.css">
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/kahnblog/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/kahnblog/" >Kahn&#39;s blogs</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">记一次AndroidStudio Git升级</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/kahnblog/>Kahn's blogs</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+    
+    <div class="site-intro-img" style="background-image: url(/kahnblog/intro/post-bg.jpg)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            记一次AndroidStudio Git升级
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+        </p>
+        <!-- 404 -->
+        
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = Git>Git</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2023/09/19</span>
+            </div>
+            <!-- 
+
+<div class="post-share iconfont-archer">
+    <ul class="share-box" data-href = "/kahnblog/2023/09/19/记一次AndroidStudio-Git升级/" data-title = "记一次AndroidStudio Git升级" >
+        <li class="to-weibo">分享到微博</li>
+        <li class="to-wechat">分享到微信</li>
+        <li class="to-qq">分享到QQ</li>
+        <li class="to-twitter">分享到twitter</li>
+    </ul>
+</div> -->
+        
+    </div>
+</div>
+        <div class="container">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="记一次AndroidStudio-Git升级"><a href="#记一次AndroidStudio-Git升级" class="headerlink" title="记一次AndroidStudio Git升级"></a><strong>记一次AndroidStudio Git升级</strong></h1><p><strong>背景</strong></p>
+<p>因androidstudio升级，git的操作方式都有改变。查看了androidstudio使用的git版本，出现git版本已过期等字样</p>
+<p><img src="https://raw.githubusercontent.com/kahnsen/image_hosting_service/main/img202309191035689.png" alt></p>
+<p>为了能更好的使用和适配androidstudio，决定升级git。</p>
+<p><strong>行动</strong></p>
+<p><strong>方案一</strong></p>
+<p>使用brew直接升级</p>
+<p><strong>问题一</strong></p>
+<p>由于新电脑为apple m1芯片，该电脑的所有文件都是由我之前那一台非m1芯片的MacBook pro上迁移过来的。导致brew不可用</p>
+<p><strong>解决</strong></p>
+<p>升级 brew </p>
+<p>引用</p>
+<ol>
+<li><a href="https://blog.csdn.net/yechaoa/article/details/127273479" target="_blank" rel="noopener">https://blog.csdn.net/yechaoa/article/details/127273479</a></li>
+<li><a href="https://medium.com/geekculture/error-cannot-install-in-homebrew-on-arm-processor-in-intel-default-prefix-fd2e5f5fee88" target="_blank" rel="noopener">https://medium.com/geekculture/error-cannot-install-in-homebrew-on-arm-processor-in-intel-default-prefix-fd2e5f5fee88</a></li>
+</ol>
+<p><strong>问题二</strong></p>
+<p>使用brew安装新版本（2.42.0）后，打开androidstudio，测试连接成功后。发现git的annocation（查看某一行代码何时修改）功能不可用</p>
+<p><img src="https://raw.githubusercontent.com/kahnsen/image_hosting_service/main/img202309181745743.png" alt></p>
+<p>一直卡死在这里弹不出。</p>
+<p>并且点击工具栏中的git pull，也是报错</p>
+<p><strong>解决</strong></p>
+<p><strong>尝试一</strong></p>
+<p>猜测是git版本太新，可androidstudio不匹配。</p>
+<p>尝试使用brew安装历史git版本 <a href="https://zhuanlan.zhihu.com/p/617188441" target="_blank" rel="noopener">Homebrew 安装指定版本软件教程</a>。</p>
+<p>首先尝试as最小适配版本，2.17.0发现无法安装，google后，说一些历史版本不在维护或者相关依赖库不在维护，无法安装。</p>
+<p>再尝试安装比最新版本小的版本，先后安装了2.35.1  2.39.1  2.42.0，都不行。</p>
+<p>怀疑是不是brew安装的git有问题</p>
+<p><strong>方案二</strong></p>
+<p>去git官网下载mac可直接安装的安装包。找到最新可安装的包为2.33版本。安装后，打开androidstudio。<strong>尝试成功！</strong></p>
+<p><strong>验证brew下载的包到底有没有问题</strong></p>
+<p>用brew下载2.33.0, 2.33.1_1, 2.34.0</p>
+<p>2.33相关的包，都ok。2.34就不行</p>
+<p>基本猜测不是brew的问题。是androidstudio支持版本，知道2.33。也可能是安装包安装了相关依赖库？</p>
+<p><strong>目前结论</strong></p>
+<p>基本认为是as支持版本上限为2.33</p>
+<p><strong>小问题</strong></p>
+<p>安装新版本后，把命令行也改成新版本了，结果发现git输出变成了中文。在环境变量里加入alias git=’LANG=en_US.UTF-8 git’解决问题</p>
+<p><strong>本次升级git总结</strong></p>
+<p><strong>遇到的问题</strong></p>
+<ol>
+<li><p>安装新brew来适配M1芯片</p>
+</li>
+<li><ol>
+<li><a href="https://blog.csdn.net/yechaoa/article/details/127273479" target="_blank" rel="noopener">https://blog.csdn.net/yechaoa/article/details/127273479</a></li>
+<li><a href="https://medium.com/geekculture/error-cannot-install-in-homebrew-on-arm-processor-in-intel-default-prefix-fd2e5f5fee88" target="_blank" rel="noopener">https://medium.com/geekculture/error-cannot-install-in-homebrew-on-arm-processor-in-intel-default-prefix-fd2e5f5fee88</a></li>
+</ol>
+</li>
+<li><p>使用brew安装历史版本的软件</p>
+</li>
+<li><ol>
+<li><a href="https://zhuanlan.zhihu.com/p/617188441" target="_blank" rel="noopener">Homebrew 安装指定版本软件教程</a></li>
+</ol>
+</li>
+<li><p>git改为英文输出</p>
+</li>
+</ol>
+<p><strong>解决问题的思路</strong></p>
+<p>当发现需要适配brew时，应该直接先尝试官网下载可安装的包，可以节省大量时间。不过目前也掌握了更多的东西。</p>
+<p><strong>常用路径配置备份</strong></p>
+<p><strong>git目录记录</strong></p>
+<p>M1 brew安装的git /opt/homebrew/Cellar/git</p>
+<p>非M1 brew /usr/local/Cellar/git/</p>
+<p>系统 /usr/local/bin/git</p>
+<p><strong>环境变量配置</strong></p>
+<p>export PATH=”/opt/homebrew/bin:$PATH”</p>
+<p>export GIT=/opt/homebrew/Cellar/git/2.42.0</p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+            <li class="previous">
+                <a href= "/kahnblog/2024/10/09/测试App启动速度脚本/" title= 测试App启动速度脚本 >
+                    <span>Previous Post</span>
+                    <span>测试App启动速度脚本</span>
+                </a>
+            </li>
+        
+        
+            <li class="next">
+                <a href= "/kahnblog/2023/09/19/Javadoc详解/" title= Javadoc详解 >
+                    <span>Next Post</span>
+                    <span>Javadoc详解</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 来必力City版安装代码 -->
+
+    
+
+<!-- City版安装代码已完成 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="emailto:kahn_2009@live.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/kahnsen" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span>
+        <span
+            id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_pv"></span>
+        </span>
+    </div>
+    
+</footer>
+    </div>
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-category">
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 26 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2024 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/09</span><a class="archive-post-title" href= "/kahnblog/2024/10/09/测试App启动速度脚本/" >测试App启动速度脚本</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2023 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/19</span><a class="archive-post-title" href= "/kahnblog/2023/09/19/记一次AndroidStudio-Git升级/" >记一次AndroidStudio Git升级</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/19</span><a class="archive-post-title" href= "/kahnblog/2023/09/19/Javadoc详解/" >Javadoc详解</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/19</span><a class="archive-post-title" href= "/kahnblog/2023/09/19/MacOs自动同步本地Git库到Github/" >MacOs自动同步本地Git库到Github</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/15</span><a class="archive-post-title" href= "/kahnblog/2020/05/15/Git-Commit-Message规范/" >Git Commit Message规范</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/04</span><a class="archive-post-title" href= "/kahnblog/2019/03/04/学习Dart语言随手笔记/" >学习Dart语言随手笔记</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/28</span><a class="archive-post-title" href= "/kahnblog/2018/12/28/Dart依赖和搭建Flutter-or-Dart简易私人仓库/" >Dart依赖和搭建Flutter or Dart简易私人仓库</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/20</span><a class="archive-post-title" href= "/kahnblog/2018/07/20/Flutter了解一下？/" >Flutter了解一下？</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span><a class="archive-post-title" href= "/kahnblog/2018/07/06/使用Python创建你自己的CLI工具箱/" >使用Python的Plumbum库创建你自己的CLI工具箱</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/29</span><a class="archive-post-title" href= "/kahnblog/2018/06/29/Python3学习笔记/" >Python3学习笔记</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/03</span><a class="archive-post-title" href= "/kahnblog/2018/05/03/用Android-productFlavors-构建你的多面应用/" >用Android productFlavors 构建你的多面应用 </a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/05</span><a class="archive-post-title" href= "/kahnblog/2017/12/05/Annotation-Processing-Tool/" >Annotation Processing Tool</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/29</span><a class="archive-post-title" href= "/kahnblog/2017/11/29/ASM全解析/" >ASM全解析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/23</span><a class="archive-post-title" href= "/kahnblog/2017/11/23/Git常用命令备忘/" >Git常用命令备忘</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/17</span><a class="archive-post-title" href= "/kahnblog/2017/11/17/搭建Jenkins-Git-Gradle持续集成CI打包平台/" >搭建Jenkins+Git+Gradle持续集成CI打包平台</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/kahnblog/2017/10/30/Java-7-and-Java-8特性你有用过吗？一/" >Java 7 and Java 8特性你有用过吗？二</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/27</span><a class="archive-post-title" href= "/kahnblog/2017/09/27/Java-7-and-Java-8特性你有用过吗？/" >Java 7 and Java 8特性你有用过吗？一</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/19</span><a class="archive-post-title" href= "/kahnblog/2017/09/19/Android原生app加载RN界面原理/" >Android原生app加载RN界面过程</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/15</span><a class="archive-post-title" href= "/kahnblog/2017/09/15/RN环境-Android原生和JS交互/" >RN环境 Android原生和JS交互</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/14</span><a class="archive-post-title" href= "/kahnblog/2017/09/14/Dagger-2-迁移方案和生成代码基本原理/" >Dagger 2 迁移方案和生成代码基本原理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/14</span><a class="archive-post-title" href= "/kahnblog/2017/09/14/EventBus3-0源代码全解析/" >EventBus3.0源代码全解析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/kahnblog/2017/09/12/Android集成RN/" >现有原生Android应用集成RN（React Native Android）开发环境</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/11</span><a class="archive-post-title" href= "/kahnblog/2017/09/11/你还敢说精通Java吗？/" >你还敢说精通Java吗？</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/08</span><a class="archive-post-title" href= "/kahnblog/2017/09/08/开源许可证/" >开源许可证文章整理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/08</span><a class="archive-post-title" href= "/kahnblog/2017/09/08/Markdown-Help/" >Markdown Help</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2014 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/11</span><a class="archive-post-title" href= "/kahnblog/2014/06/11/UML复习备忘录/" >UML复习备忘录</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">Software</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Java</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Android</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">RN</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Dart</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Flutter</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Git</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Reproduced</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Tools</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Dagger</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Python</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Python3</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">EventBus</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/kahnblog/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+
